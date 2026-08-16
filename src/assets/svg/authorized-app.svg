@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">已授權的桌面應用程式</title>
+  <desc id="desc">桌面應用程式視窗搭配勾選盾牌，表示只操作使用者已允許的應用程式。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="58" y="66" width="396" height="338" rx="36" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M65 137h382" stroke="#F7F2E7" stroke-width="12"/>
+    <circle cx="98" cy="102" r="10" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+    <circle cx="132" cy="102" r="10" fill="#F7F2E7" fill-opacity=".42" stroke="#F7F2E7" stroke-opacity=".42" stroke-width="4"/>
+    <circle cx="166" cy="102" r="10" fill="#F7F2E7" fill-opacity=".22" stroke="#F7F2E7" stroke-opacity=".22" stroke-width="4"/>
+
+    <rect x="91" y="174" width="126" height="146" rx="24" fill="#C8F04B" fill-opacity=".08" stroke="#F7F2E7" stroke-width="11"/>
+    <rect x="119" y="202" width="28" height="28" rx="7" fill="#C8F04B" stroke="#C8F04B" stroke-width="5"/>
+    <rect x="161" y="202" width="28" height="28" rx="7" stroke="#F7F2E7" stroke-opacity=".58" stroke-width="8"/>
+    <rect x="119" y="244" width="28" height="28" rx="7" stroke="#F7F2E7" stroke-opacity=".58" stroke-width="8"/>
+    <rect x="161" y="244" width="28" height="28" rx="7" stroke="#F7F2E7" stroke-opacity=".58" stroke-width="8"/>
+    <path d="M252 186h139M252 222h106M252 258h74" stroke="#F7F2E7" stroke-opacity=".56" stroke-width="10"/>
+
+    <path d="M350 230c30 23 57 29 92 32v80c0 53-37 89-92 111-55-22-92-58-92-111v-80c35-3 62-9 92-32Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="m304 344 29 29 65-75" stroke="#C8F04B" stroke-width="16"/>
+    <circle cx="350" cy="268" r="10" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: geometricPrecision;
+    /*
+     * 這裡刻意「沒有」 -webkit-font-smoothing: antialiased 與
+     * -moz-osx-font-smoothing: grayscale。
+     *
+     * 那兩行是「淺字壓深底」的補償：深色主題下字會顯得過胖，抹細剛好。
+     * 亮色主題是「深字壓紙底」，方向相反——同樣兩行會把筆畫削細，
+     * 24px 的繁體中文筆畫多、封閉區塊小，首當其衝。
+     * 這是整次深色轉亮色裡對中文可讀性影響最大的一項，不要加回來。
+     */
+  }
+
+  ::selection {
+    /* 亮色下 28% 太淡看不出選取範圍，提到 45%（合成後對面板約 2:1） */
+    background: color-mix(in srgb, var(--color-acid) 45%, transparent);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    /*
+     * 用 blue 而不是 acid：這是全鍵盤操作簡報時唯一的焦點提示，
+     * 而 blue 對面板 9.91:1 是九支強調色裡最高的，去飽和後也最好抓。
+     */
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
+
+  pre {
+    tab-size: 2;
+  }
+
+  code,
+  kbd {
+    font-family: var(--font-mono);
+  }
+
+  /* 淺色捲軸，避免簡報中出現一條刺眼的深色重條。
+     值不用改：var(--color-line) 已經跟著色票變成暖灰（對紙底 1.74:1），
+     看得見但不搶戲 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: var(--color-line);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /*
+   * 翻頁進場動畫。
+   * 刻意用 CSS 而非 JS：元素的基準狀態就是可見的，動畫只是加分，
+   * 即使動畫被停用或瀏覽器節流，內容也一定看得到。
+   */
+  @keyframes slide-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .slide-enter {
+    animation: slide-enter 200ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide-enter {
+      animation: none;
+    }
+  }
+}

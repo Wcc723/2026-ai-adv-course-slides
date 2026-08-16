@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">API server icon</title>
+  <desc id="desc">A three-tier server rack with input and output connection nodes.</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 142H63v-31M416 370h33v31" stroke="#42D7C2" stroke-width="10"/>
+    <circle cx="63" cy="111" r="13" fill="#121A21" stroke="#42D7C2" stroke-width="9"/>
+    <circle cx="449" cy="401" r="13" fill="#121A21" stroke="#42D7C2" stroke-width="9"/>
+
+    <rect x="91" y="78" width="330" height="108" rx="27" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <rect x="91" y="202" width="330" height="108" rx="27" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <rect x="91" y="326" width="330" height="108" rx="27" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+
+    <path d="M124 132h112M124 256h112M124 380h112" stroke="#F7F2E7" stroke-opacity=".75" stroke-width="12"/>
+    <path d="M124 158h74M124 282h74M124 406h74" stroke="#F7F2E7" stroke-opacity=".35" stroke-width="8"/>
+
+    <circle cx="337" cy="132" r="12" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+    <circle cx="376" cy="132" r="12" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+    <circle cx="337" cy="256" r="12" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+    <circle cx="376" cy="256" r="12" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+    <circle cx="337" cy="380" r="12" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+    <circle cx="376" cy="380" r="12" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+
+    <path d="M55 256h36M421 256h36" stroke="#FF6B5A" stroke-width="12"/>
+    <path d="m67 233-23 23 23 23M445 233l23 23-23 23" stroke="#FF6B5A" stroke-width="12"/>
+    <path d="M256 186v16M256 310v16" stroke="#C8F04B" stroke-width="12"/>
+  </g>
+</svg>

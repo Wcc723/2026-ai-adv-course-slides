@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">網站企劃與完整文案</title>
+  <desc id="desc">帶有內容線條的企劃文件與編輯筆，表示規劃網站並撰寫完整文案。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 54h208l74 74v320H92V54Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M300 54v74h74" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M132 170h154M132 216h196" stroke="#C8F04B" stroke-width="12"/>
+    <path d="M132 262h166M132 308h118M132 354h92" stroke="#F7F2E7" stroke-opacity=".68" stroke-width="10"/>
+
+    <path d="m326 350 82-82c8-8 20-8 28 0l10 10c8 8 8 20 0 28l-82 82-38-38Z" fill="#C8F04B" fill-opacity=".16" stroke="#C8F04B" stroke-width="12"/>
+    <path d="m326 350-19 56 57-18-38-38Z" fill="#121A21" stroke="#F7F2E7" stroke-width="11"/>
+    <path d="m398 278 38 38" stroke="#F7F2E7" stroke-width="10"/>
+    <path d="m307 406-8 8" stroke="#C8F04B" stroke-width="10"/>
+  </g>
+</svg>

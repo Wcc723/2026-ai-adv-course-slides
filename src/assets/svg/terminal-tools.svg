@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">終端與本機工具</title>
+  <desc id="desc">終端視窗搭配扳手，表示執行電腦上的開發與自動化工具。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="58" y="68" width="396" height="350" rx="36" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M65 138h382" stroke="#F7F2E7" stroke-width="12"/>
+    <circle cx="98" cy="103" r="10" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+    <circle cx="132" cy="103" r="10" fill="#F7F2E7" fill-opacity=".48" stroke="#F7F2E7" stroke-opacity=".48" stroke-width="4"/>
+    <circle cx="166" cy="103" r="10" fill="#F7F2E7" fill-opacity=".22" stroke="#F7F2E7" stroke-opacity=".22" stroke-width="4"/>
+
+    <path d="m104 197 39 31-39 31" stroke="#FF6B5A" stroke-width="14"/>
+    <path d="M171 259h75" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M105 304h119M105 340h82" stroke="#F7F2E7" stroke-opacity=".42" stroke-width="10"/>
+
+    <g transform="translate(-28 0)">
+      <path d="M396 189c-19-5-40 1-54 15-17 17-21 43-10 64l-72 72c-21 21-21 55 0 76s55 21 76 0l72-72c21 11 47 7 64-10 14-14 20-35 15-54l-44 36-30-8-8-30 36-44c-9-20-25-39-45-45Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+      <path d="M332 344 286 390" stroke="#FF6B5A" stroke-width="12"/>
+      <circle cx="292" cy="390" r="14" fill="#121A21" stroke="#FF6B5A" stroke-width="10"/>
+    </g>
+  </g>
+</svg>

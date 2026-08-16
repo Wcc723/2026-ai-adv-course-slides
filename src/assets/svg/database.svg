@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Database icon</title>
+  <desc id="desc">A layered database cylinder with records and connection nodes.</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 131c0-41 73-73 164-73s164 32 164 73v250c0 41-73 73-164 73S92 422 92 381V131Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <ellipse cx="256" cy="131" rx="164" ry="73" fill="#42D7C2" fill-opacity=".08" stroke="#F7F2E7" stroke-width="14"/>
+
+    <path d="M92 214c0 41 73 73 164 73s164-32 164-73" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M92 298c0 41 73 73 164 73s164-32 164-73" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M151 192c28 14 64 22 105 22 40 0 76-8 104-22" stroke="#42D7C2" stroke-width="11"/>
+    <path d="M151 276c28 14 64 22 105 22 40 0 76-8 104-22" stroke="#C8F04B" stroke-width="11"/>
+    <path d="M151 360c28 14 64 22 105 22 40 0 76-8 104-22" stroke="#FF6B5A" stroke-width="11"/>
+
+    <circle cx="178" cy="126" r="11" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+    <path d="M215 126h118" stroke="#F7F2E7" stroke-opacity=".7" stroke-width="11"/>
+
+    <path d="M92 257H53v-34M420 340h39v34" stroke="#42D7C2" stroke-width="10"/>
+    <circle cx="53" cy="223" r="13" fill="#121A21" stroke="#42D7C2" stroke-width="9"/>
+    <circle cx="459" cy="374" r="13" fill="#121A21" stroke="#42D7C2" stroke-width="9"/>
+    <path d="M256 454v34M232 488h48" stroke="#C8F04B" stroke-width="10"/>
+  </g>
+</svg>

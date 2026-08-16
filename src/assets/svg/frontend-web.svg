@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Frontend web interface icon</title>
+  <desc id="desc">A browser window with modular interface panels and connection details.</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="54" y="80" width="404" height="326" rx="38" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M61 153H451" stroke="#F7F2E7" stroke-width="12"/>
+
+    <circle cx="98" cy="117" r="10" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+    <circle cx="132" cy="117" r="10" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+    <circle cx="166" cy="117" r="10" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+    <path d="M216 117H410" stroke="#F7F2E7" stroke-opacity=".72" stroke-width="10"/>
+
+    <rect x="91" y="190" width="140" height="174" rx="24" fill="#FF6B5A" fill-opacity=".09" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M119 224H203M119 250H177" stroke="#FF6B5A" stroke-width="12"/>
+    <rect x="119" y="286" width="84" height="48" rx="14" fill="#FF6B5A" fill-opacity=".17" stroke="#FF6B5A" stroke-width="10"/>
+
+    <path d="M270 205H411" stroke="#C8F04B" stroke-width="14"/>
+    <path d="M270 240H374" stroke="#F7F2E7" stroke-opacity=".78" stroke-width="10"/>
+    <path d="M270 270H397" stroke="#F7F2E7" stroke-opacity=".45" stroke-width="10"/>
+    <rect x="268" y="310" width="64" height="52" rx="15" fill="#42D7C2" fill-opacity=".16" stroke="#42D7C2" stroke-width="10"/>
+    <rect x="350" y="310" width="64" height="52" rx="15" fill="#C8F04B" fill-opacity=".13" stroke="#C8F04B" stroke-width="10"/>
+
+    <path d="M397 385v47M373 432h48" stroke="#42D7C2" stroke-width="10"/>
+    <circle cx="397" cy="432" r="12" fill="#121A21" stroke="#42D7C2" stroke-width="9"/>
+    <path d="M115 406v29h29" stroke="#FF6B5A" stroke-width="10"/>
+  </g>
+</svg>

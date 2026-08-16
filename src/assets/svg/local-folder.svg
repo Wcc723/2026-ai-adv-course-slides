@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">本機資料夾與檔案</title>
+  <desc id="desc">一個開啟的本機資料夾收納文件，表示可讀取電腦內的網站檔案。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 164c0-22 18-40 40-40h88l42 48h178c22 0 40 18 40 40v200c0 22-18 40-40 40H102c-22 0-40-18-40-40V164Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M63 216h386" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M102 124h88l42 48h106" stroke="#42D7C2" stroke-width="12"/>
+
+    <path d="M174 252c0-11 9-20 20-20h93l51 51v105c0 11-9 20-20 20H194c-11 0-20-9-20-20V252Z" fill="#42D7C2" fill-opacity=".09" stroke="#F7F2E7" stroke-width="12"/>
+    <path d="M287 233v50h50" stroke="#42D7C2" stroke-width="11"/>
+    <path d="M210 313h85M210 347h92M210 381h62" stroke="#42D7C2" stroke-width="11"/>
+
+    <path d="M92 420h328" stroke="#42D7C2" stroke-opacity=".32" stroke-width="10"/>
+    <circle cx="112" cy="180" r="11" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+  </g>
+</svg>

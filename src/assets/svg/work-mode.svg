@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Work 成果模式</title>
+  <desc id="desc">可檢查的任務成果面板與完成標記，表示產出完整企劃和文案。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="70" y="58" width="372" height="396" rx="38" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M77 136h358" stroke="#F7F2E7" stroke-width="12"/>
+    <circle cx="112" cy="98" r="11" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+    <path d="M146 98h144" stroke="#42D7C2" stroke-width="12"/>
+    <path d="M354 98h42" stroke="#F7F2E7" stroke-opacity=".55" stroke-width="10"/>
+
+    <rect x="104" y="168" width="304" height="228" rx="26" fill="#42D7C2" fill-opacity=".07" stroke="#F7F2E7" stroke-width="12"/>
+    <rect x="128" y="196" width="34" height="34" rx="10" fill="#42D7C2" fill-opacity=".14" stroke="#42D7C2" stroke-width="10"/>
+    <path d="m137 212 8 8 16-20M190 205h158M190 226h116" stroke="#42D7C2" stroke-width="10"/>
+    <rect x="128" y="260" width="34" height="34" rx="10" stroke="#42D7C2" stroke-width="10"/>
+    <path d="M190 269h174M190 290h132" stroke="#F7F2E7" stroke-opacity=".68" stroke-width="10"/>
+    <rect x="128" y="324" width="34" height="34" rx="10" stroke="#42D7C2" stroke-width="10"/>
+    <path d="M190 333h144M190 354h100" stroke="#F7F2E7" stroke-opacity=".68" stroke-width="10"/>
+
+    <circle cx="380" cy="386" r="48" fill="#121A21" stroke="#C8F04B" stroke-width="12"/>
+    <path d="m356 386 16 16 34-38" stroke="#C8F04B" stroke-width="12"/>
+  </g>
+</svg>

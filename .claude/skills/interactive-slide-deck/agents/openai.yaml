@@ -1,0 +1,4 @@
+interface:
+  display_name: "Interactive Slide Deck"
+  short_description: "在本專案新增或修改互動式教學簡報的完整流程"
+  default_prompt: "Use $interactive-slide-deck to plan and build a teaching deck in this repo: outline the steps first, copy src/showcase/版型示範 as the starting point, pick a SlideBody layout per page, follow the 1920×1080 stage budget and the theme.css tokens, then run pnpm lint, pnpm build, and the browser audit in scripts/audit-slides.js until every page passes."

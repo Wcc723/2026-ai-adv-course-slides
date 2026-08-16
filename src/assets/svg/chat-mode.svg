@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Chat 對話模式</title>
+  <desc id="desc">兩個交疊的對話泡泡，表示以交談釐清網站內容與想法。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M214 76H414c19 0 34 15 34 34v136c0 19-15 34-34 34h-32l20 46-68-46H214c-19 0-34-15-34-34V110c0-19 15-34 34-34Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M220 126h180M220 166h132" stroke="#FF6B5A" stroke-width="12"/>
+    <circle cx="400" cy="214" r="12" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+
+    <path d="M94 174h232c20 0 36 16 36 36v128c0 20-16 36-36 36H170l-70 58 26-58H94c-20 0-36-16-36-36V210c0-20 16-36 36-36Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M106 230h196M106 274h154" stroke="#FF6B5A" stroke-width="14"/>
+    <path d="M106 318h92" stroke="#F7F2E7" stroke-opacity=".68" stroke-width="10"/>
+    <circle cx="302" cy="318" r="12" fill="#FF6B5A" stroke="#FF6B5A" stroke-width="4"/>
+  </g>
+</svg>

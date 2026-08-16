@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">網站檢查</title>
+  <desc id="desc">瀏覽器視窗上的放大鏡與勾選記號，表示打開、檢查與驗證網站。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="54" y="68" width="404" height="328" rx="36" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M61 139h390" stroke="#F7F2E7" stroke-width="12"/>
+    <circle cx="98" cy="103" r="10" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+    <circle cx="132" cy="103" r="10" fill="#F7F2E7" fill-opacity=".42" stroke="#F7F2E7" stroke-opacity=".42" stroke-width="4"/>
+    <circle cx="166" cy="103" r="10" fill="#F7F2E7" fill-opacity=".22" stroke="#F7F2E7" stroke-opacity=".22" stroke-width="4"/>
+    <path d="M213 103h194" stroke="#F7F2E7" stroke-opacity=".48" stroke-width="10"/>
+
+    <rect x="91" y="176" width="124" height="152" rx="22" fill="#42D7C2" fill-opacity=".08" stroke="#F7F2E7" stroke-width="11"/>
+    <path d="M118 211h70M118 244h48M118 293h70" stroke="#42D7C2" stroke-width="11"/>
+    <path d="M252 184h143M252 220h111M252 256h83" stroke="#F7F2E7" stroke-opacity=".58" stroke-width="10"/>
+
+    <circle cx="335" cy="326" r="82" fill="#121A21" stroke="#42D7C2" stroke-width="14"/>
+    <path d="m393 384 58 58" stroke="#42D7C2" stroke-width="20"/>
+    <path d="m296 328 27 27 53-60" stroke="#F7F2E7" stroke-width="14"/>
+  </g>
+</svg>

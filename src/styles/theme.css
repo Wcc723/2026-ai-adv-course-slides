@@ -1,0 +1,141 @@
+/**
+ * 專案色票（technical-editorial light — 淨白米 + 墨版）
+ *
+ * 亮色主題：淨白米的紙面、深墨的字、低彩度的印刷油墨強調色。
+ * 這是「取代」而不是「可切換」——沒有 data-theme、沒有 prefers-color-scheme，
+ * 全站只有這一套值。要改回深色就是改這個檔，沒有第二組 token 要維護。
+ *
+ * 兩組色票的分工：
+ * - UI 色票（ink / panel / paper / acid / coral / teal / blue）：介面、文字、圖解
+ * - 素材色票（icon-*）：既有 SVG 素材內建的色值，僅供對照使用，不要拿去改素材
+ *
+ * ⚠ 強調色的 token 名稱是「角色」不是「色相」。acid 現在是品紅、lime 是松綠，
+ *   名字沿用深色時代是為了不動 `Accent` 型別與各 deck 的既有寫法。
+ *   選色時請看註解寫的用途，不要照名字猜顏色。
+ */
+/*
+ * 用 `static` 是必要的：Tailwind v4 預設只輸出「有被 utility 用到」的變數，
+ * 但這裡的 token 也會被 SVG 圖解以 var(--color-*) 直接引用、被色票頁即時讀取，
+ * 沒有 static 的話那些變數不會出現在產出的 CSS 裡。
+ */
+@theme static {
+  /* ── 基底：依角色排列，不再是單調的明暗序 ──────────
+     亮色主題的表面關係跟深色相反：panel 最亮，「浮起」與「凹陷」
+     各自往深處走一階。判準寫在 panel-lift 那一行。 */
+  --color-ink: #f4f1e8; /* 舞台與頁面底色（淨白米） */
+  --color-ink-soft: #e9e5d9; /* 下沉：頁首頁尾、程式碼井、圖解節點 fill */
+  --color-panel: #fffdf9; /* 卡片、面板 —— 最亮的表面 */
+  --color-panel-lift: #efebe0; /* 浮起／hover。⚠ 只能疊在 panel 上（1.17:1）；
+                                  疊在 ink 上只有 1.05:1，會整個消失 */
+  --color-line: #c2b8a2; /* 主要分隔線、邊框（對 panel 1.94:1） */
+  --color-line-soft: #dad4c4; /* 次要分隔線（對 panel 1.46:1） */
+  --color-letterbox: #f4f1e8; /* 投影舞台外的 letterbox。
+                                 目前刻意跟 --color-ink 同值：舞台邊界完全隱形，
+                                 非 16:9 的螢幕上看起來就是一整片連續的紙。
+
+                                 這裡原本放的是深色 #241f1a，理由是「翻淺之後
+                                 上下會多出兩條亮帶」。實際看過之後決定不要那兩條——
+                                 深色框反而把 16:9 的邊界畫得很明顯。
+
+                                 token 仍然跟 ink 分開，不要合併：舞台外框與頁面底
+                                 是兩件事，哪天要在投影時把外框壓深（例如全黑教室
+                                 想減少溢光），改這一行就好，不會動到頁面底色。 */
+
+  /* ── 前景 ──────────────────────────────────────
+     三個層級對 --color-panel 的對比度分別是 16.22:1 / 8.72:1 / 7.39:1，
+     對最深的表面 ink-soft 也還有 13.08 / 7.03 / 5.96。
+     投影與直播壓縮會再吃掉一些對比，不要降低這個差距。
+     （深色時代這裡寫「不要調得更暗」，亮色下方向相反，所以改成講對比。） */
+  --color-paper: #211f19; /* 主要文字。刻意不用純黑，避免高亮投影下的黑邊與壓縮 ringing */
+  --color-muted: #4f4a39; /* 次要文字 */
+  --color-faint: #5c5440; /* 標籤、行號、表頭、極次要文字 */
+  --color-on-accent: #fffdf9; /* 實心強調色色塊上的挖空文字。
+                                 對九支強調色是 6.47–9.91:1。
+                                 拆成獨立 token 是因為以前用 text-ink 只是巧合 */
+
+  /* ── 強調色（主色系）───────────────────────────
+     九支全部是低彩度印刷油墨色，對四個表面都 ≥5.22:1。
+     ⚠ 一頁最多兩個強調色。安靜的油墨色看起來「多放幾個也還好」，
+       但正因為彼此對比低，一頁四五支會變成看不出重點的雜訊。 */
+  --color-acid: #9f257b; /* 品紅。主強調：當前步驟、CTA、focus ring、selection */
+  --color-coral: #883a20; /* 赭石。對比強調：問題、舊做法、警示 */
+  --color-teal: #095c5a; /* 青碧。正向：成功、資料流、連線 */
+  --color-blue: #2a3796; /* 群青。資訊：說明、次要標記、表格連結 */
+
+  /* ── 延伸色（圖解需要更多可辨識色時使用）──────── */
+  --color-lime: #126625; /* 松綠。執行、命令、輸出 */
+  --color-sky: #1a6196; /* 霽藍。型別、選擇器 */
+  --color-violet: #6c3297; /* 葡萄紫。類別、元件 */
+  --color-amber: #5e4410; /* 黃櫨。過渡、等待中 */
+  --color-danger: #891d36; /* 絳紅。錯誤、破壞性操作 */
+
+  /* ── 語意色 ────────────────────────────────────
+     這裡是 var() 別名不是色值複本。深色時代這幾行是硬編碼的重複值，
+     註解寫著「改色只改這一段」但線根本沒接上——改 teal 不會動到 ok。
+     接成別名之後，上面每動一支強調色，這裡就真的跟著走。 */
+  --color-ok: var(--color-teal);
+  --color-warn: var(--color-amber); /* 不指向 acid：acid 已經是 CTA，共用會失去語意 */
+  --color-error: var(--color-danger);
+  --color-info: var(--color-blue);
+
+  /* ── 教學角色色（前後端 / 資料流圖解共用）──────── */
+  --color-role-user: var(--color-coral); /* 使用者、操作端 */
+  --color-role-client: var(--color-blue); /* 前端、瀏覽器 */
+  --color-role-server: var(--color-acid); /* 後端、API */
+  --color-role-data: var(--color-teal); /* 狀態、資料庫 */
+
+  /* ── 程式語言色（CodeTabs 標籤點）──────────────
+     ⚠ 10px 的實心圓點只靠顏色分辨，是全站最吃色相差的地方。
+       深色時代靠螢光色拉開，亮色下請確認新增語言時不要挑到相鄰色相。 */
+  --color-lang-html: var(--color-coral);
+  --color-lang-css: var(--color-blue);
+  --color-lang-javascript: var(--color-acid);
+  --color-lang-typescript: var(--color-sky);
+  --color-lang-jsx: var(--color-teal);
+  --color-lang-tsx: var(--color-violet);
+
+  /* ── 素材色票（既有 SVG 內建色，僅供對照）────────
+     ⚠ 這幾個值刻意「沒有」跟著轉亮色，因為 12 個 SVG 素材檔案一個位元都沒改。
+       素材是奶白線稿配深色填色，本來就是為深底畫的；亮色主題的做法是
+       在素材底下墊一塊 bg-paper 的近黑底板（見 SlideBodyView 的 title 與 assets 版型），
+       讓素材維持原本的明暗關係：線稿對底板 14.76:1、內部填色對底板 1.07:1，
+       對照原本在 #171713 面板上的 16.10:1 / 1.02:1。
+       所以這裡記錄的仍然是「素材檔案裡實際有什麼」，不是「應該改成什麼」。 */
+  --color-icon-base: #f7f2e7; /* 主線稿，出現 76 處 */
+  --color-icon-plate: #121a21; /* 素材內部的深色填色（螢幕、機殼、終端機視窗），31 處 */
+  --color-icon-coral: #ff6b5a;
+  --color-icon-lime: #c8f04b;
+  --color-icon-teal: #42d7c2;
+
+  /* ── 字體 ─────────────────────────────────────── */
+  --font-sans: "Avenir Next", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+  --font-display: "Avenir Next Condensed", "DIN Condensed", "PingFang TC",
+    "Noto Sans TC", sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas,
+    monospace;
+}
+
+/*
+ * 備用強調色：暖紙墨印的原始提案（深橄欖金家族）。
+ * 想換回這一組就整段搬上去覆蓋對應的九行。
+ *
+ * ⚠ 已知缺陷，換之前要知道：acid 與 amber 色相只差 15°、對比只差 0.08:1，
+ *   coral/amber 差 21°/0.10，blue/sky 差 17°/0.20，teal/sky 差 22°/0.54。
+ *   投影機去飽和之後這四組會各自塌成同一支。上面的墨版是 0 組違規。
+ *
+ *   --color-acid: #665a0c;   深橄欖金
+ *   --color-coral: #9e3c18;  氧化磚紅
+ *   --color-teal: #0c6459;   深松石綠
+ *   --color-blue: #1b5391;   鋼藍
+ *   --color-lime: #456214;   橄欖松綠
+ *   --color-sky: #105b73;    石油藍
+ *   --color-violet: #63398f; 茄紫
+ *   --color-amber: #7e5108;  焦赭
+ *   --color-danger: #9c1820; 深緋
+ */
+
+/* 舞台基準尺寸：所有版面都以這組座標撰寫，再等比縮放到視窗 */
+:root {
+  --stage-width: 1920;
+  --stage-height: 1080;
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">網站資料夾與檔案編輯</title>
+  <desc id="desc">資料夾中的網頁程式碼檔搭配編輯筆，表示在電腦上建立與修改網站檔案。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M74 94h126l32 40h202c17 0 30 13 30 30v232c0 17-13 30-30 30H74c-17 0-30-13-30-30V124c0-17 13-30 30-30Z" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M52 150h404" stroke="#42D7C2" stroke-width="12"/>
+
+    <rect x="132" y="174" width="248" height="218" rx="26" fill="#121A21" stroke="#42D7C2" stroke-width="12"/>
+    <path d="M138 228h236" stroke="#F7F2E7" stroke-width="10"/>
+    <circle cx="168" cy="201" r="9" fill="#42D7C2" stroke="#42D7C2" stroke-width="4"/>
+    <circle cx="199" cy="201" r="9" fill="#121A21" stroke="#F7F2E7" stroke-opacity=".6" stroke-width="8"/>
+    <path d="m214 264-34 30 34 30M298 264l34 30-34 30" stroke="#42D7C2" stroke-width="12"/>
+    <path d="m274 256-36 76" stroke="#F7F2E7" stroke-width="10"/>
+
+    <path d="m336 350 68-68c8-8 20-8 28 0l10 10c8 8 8 20 0 28l-68 68-38-38Z" fill="#FF6B5A" fill-opacity=".16" stroke="#FF6B5A" stroke-width="12"/>
+    <path d="m336 350-18 54 56-16-38-38Z" fill="#121A21" stroke="#F7F2E7" stroke-width="11"/>
+    <path d="m394 292 38 38" stroke="#F7F2E7" stroke-width="10"/>
+  </g>
+</svg>

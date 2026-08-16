@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Codex 開發模式</title>
+  <desc id="desc">終端機視窗結合程式碼括號與命令列，表示進入技術細節處理網站檔案。</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="56" y="72" width="400" height="360" rx="38" fill="#121A21" stroke="#F7F2E7" stroke-width="14"/>
+    <path d="M63 148h386" stroke="#F7F2E7" stroke-width="12"/>
+    <circle cx="102" cy="110" r="11" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+    <circle cx="140" cy="110" r="11" fill="#121A21" stroke="#F7F2E7" stroke-opacity=".7" stroke-width="8"/>
+    <circle cx="178" cy="110" r="11" fill="#121A21" stroke="#F7F2E7" stroke-opacity=".42" stroke-width="8"/>
+
+    <path d="m190 204-50 44 50 44M322 204l50 44-50 44" stroke="#C8F04B" stroke-width="14"/>
+    <path d="m282 194-52 108" stroke="#F7F2E7" stroke-width="12"/>
+
+    <path d="m108 346 22 20-22 20" stroke="#C8F04B" stroke-width="12"/>
+    <path d="M158 366h132" stroke="#F7F2E7" stroke-opacity=".78" stroke-width="11"/>
+    <path d="M324 366h72" stroke="#C8F04B" stroke-width="11"/>
+    <circle cx="416" cy="366" r="10" fill="#C8F04B" stroke="#C8F04B" stroke-width="4"/>
+  </g>
+</svg>
