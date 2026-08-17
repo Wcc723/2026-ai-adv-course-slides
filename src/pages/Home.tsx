@@ -70,7 +70,7 @@ export function Home() {
             Interactive Presentation
           </p>
           <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-paper">
-            React 互動式教學簡報
+            AI 開發進化營
           </h1>
           {/* 版型示範是 internalOnly 的，對外版沒有那一份，這句話就不能提它 */}
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
