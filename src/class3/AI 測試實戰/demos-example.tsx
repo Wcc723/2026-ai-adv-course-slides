@@ -33,6 +33,9 @@ import type { ReactElement } from 'react';
  *     合計 620，留 20px 餘裕。
  *   加大字級或行高之前先把這段算式重算一次；左欄會跟著右欄拉高，
  *   提示詞最多 6 行（180px）遠低於左欄可用高度，不是瓶頸。
+ *   選填的 extraDoc 只加一列（12 + 21 + 24 = 57），目前只掛在第 08 頁
+ *   （3 條重點 ＋ 2 條分支＝381），加完仍遠低於第 19 頁的 576。
+ *   要往第 19 頁掛之前，先重算上面那條算式。
  */
 
 /* ════════════════════════════════════════════════════════════
@@ -59,6 +62,8 @@ export interface CourseExampleSpec {
   highlights: readonly ExampleHighlight[];
   /** 最多 5 條 */
   branches: readonly ExampleBranch[];
+  /** 選填：課後延伸閱讀的外部連結，只在有給的那一頁渲染 */
+  extraDoc?: { label: string; href: string };
 }
 
 /** 四頁共用同一個示範專案，路徑固定不進 spec —— 它屬於「介面」不屬於「內容」 */
@@ -74,6 +79,28 @@ const BRANCH_FACE: Record<'ok' | 'error' | 'neutral', string> = {
   error: 'border-error/55 border-l-error bg-error/14',
   neutral: 'border-line-soft border-l-line bg-panel-lift',
 };
+
+/** 外部連結箭頭。跟 SlideBodyView 的同名零件同一套線條，只是尺寸小一號 */
+function ExternalLinkArrow() {
+  return (
+    <svg
+      width={15}
+      height={15}
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M9.5 2.5h4v4" />
+      <path d="M13.5 2.5 7.5 8.5" />
+      <path d="M11.5 9v4.5h-9v-9H7" />
+    </svg>
+  );
+}
 
 /* ════════════════════════════════════════════════════════════
  * CourseExampleView — 四頁共用的情境畫面
@@ -187,6 +214,24 @@ export function CourseExampleView({
               ))}
             </div>
           </section>
+
+          {/* 選填：額外學習文件（只有第 08 頁有） */}
+          {spec.extraDoc && (
+            <section className="shrink-0">
+              <p className="mb-1 text-[17px] leading-[21px] text-faint">
+                額外學習文件
+              </p>
+              <a
+                href={spec.extraDoc.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-[19px] leading-[24px] text-blue underline underline-offset-4 transition-colors hover:text-paper"
+              >
+                {spec.extraDoc.label}
+                <ExternalLinkArrow />
+              </a>
+            </section>
+          )}
         </div>
       </div>
     </div>
@@ -222,6 +267,10 @@ const openApiSpec: CourseExampleSpec = {
       tone: 'ok',
     },
   ],
+  extraDoc: {
+    label: 'OpenAPI 與跨專案協作的補充說明',
+    href: 'https://app.notion.com/p/3bd6ab47eb4880188035f97eec89ced6?source=copy_link#3bd6ab47eb4880298dc6c03f78260e96',
+  },
 };
 
 export function OpenApiExampleDemo(): ReactElement {

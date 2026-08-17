@@ -148,6 +148,150 @@ const unselectedButton =
   'border-line-soft bg-panel-lift text-muted hover:border-line hover:text-paper';
 
 /* ════════════════════════════════════════════════════════════
+ * 03b multi-project — 正常開發什麼情況會有多個專案
+ *
+ * 這一頁刻意「不做切換」：下一頁（04 why-split）才是切換式的 demo，
+ * 連兩頁都放 toggle，學員會以為是同一個東西換個說法。
+ * 左右並排的靜態對照 —— 左邊資料夾少、右邊模組多，一眼看得出量級差距。
+ *
+ * 強調色：teal（小型專案的結論）／acid（拆出來的每一個專案）
+ * ════════════════════════════════════════════════════════════ */
+
+interface TreeRow {
+  /** 樹狀符號跟名稱寫在同一個 mono span，字寬一致才對得齊 */
+  prefix: string;
+  name: string;
+  note: string;
+}
+
+const smallProjectTree: TreeRow[] = [
+  { prefix: '', name: 'src/', note: '原始碼' },
+  { prefix: '├─ ', name: 'components/', note: '共用元件' },
+  { prefix: '├─ ', name: 'pages/', note: '5 個頁面' },
+  { prefix: '├─ ', name: 'utils/', note: '小工具' },
+  { prefix: '└─ ', name: 'assets/', note: '圖片與字型' },
+  { prefix: '', name: 'package.json', note: '一份設定檔' },
+];
+
+interface BigProject {
+  name: string;
+  role: string;
+  duty: string;
+  scale: string;
+  /** 共用契約橫跨所有專案，佔滿一整列 */
+  wide?: boolean;
+}
+
+const bigProjects: BigProject[] = [
+  {
+    name: 'frontend/',
+    role: '前台商店',
+    duty: '商品列表、購物車、結帳流程',
+    scale: '18 個模組',
+  },
+  {
+    name: 'admin/',
+    role: '後台管理',
+    duty: '商品上下架、訂單處理、報表',
+    scale: '14 個模組',
+  },
+  {
+    name: 'backend/',
+    role: 'API 服務',
+    duty: '身分驗證、金流、訂單邏輯',
+    scale: '26 個模組',
+  },
+  {
+    name: 'database/',
+    role: '資料庫',
+    duty: 'schema 與 migration 版本',
+    scale: '9 個模組',
+  },
+  {
+    name: 'shared/',
+    role: '共用契約',
+    duty: 'openapi.json、共用型別 —— 前台、後台、後端都讀這一份',
+    scale: '3 個檔案',
+    wide: true,
+  },
+];
+
+export function MultiProjectDemo() {
+  return (
+    <div className="flex w-full max-w-[1680px] flex-col gap-5">
+      <div className="flex h-[500px] shrink-0 gap-6">
+        <ProjectPanel role="小型專案 · 1 個 repo" name="my-shop/">
+          <div className="mt-4 rounded-xl border border-line-soft bg-panel px-5 py-3">
+            {smallProjectTree.map((row) => (
+              <div key={row.name} className="flex items-baseline gap-4 py-[5px]">
+                <span className="font-mono text-[20px] whitespace-pre text-paper">
+                  {row.prefix}
+                  {row.name}
+                </span>
+                <span className="ml-auto text-[17px] text-muted">
+                  {row.note}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-auto rounded-xl border border-l-[6px] border-teal/55 border-l-teal bg-teal/14 px-5 py-3">
+            <p className="text-[21px] text-paper">
+              4–6 個資料夾 · 一個人顧得住 · 不需要拆
+            </p>
+            <p className="mt-1 text-[17px] text-paper">
+              整包掛給 AI 也才十幾個檔案，拆開反而多一層麻煩。
+            </p>
+          </div>
+        </ProjectPanel>
+
+        <ProjectPanel role="中、大型專案 · 5 個 repo" name="shop-platform/">
+          <div className="mt-3 flex shrink-0 items-center gap-3">
+            {/* 方角標籤不是藥丸：這一頁沒有任何按鈕，別讓它看起來可以按 */}
+            <span className="rounded-md bg-acid px-3 py-1 text-[17px] text-on-accent">
+              依需求拆分
+            </span>
+            <span className="text-[18px] text-muted">
+              模組多、功能複雜，前後台與資料庫各自有節奏
+            </span>
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 content-start gap-3">
+            {bigProjects.map((project) => (
+              <div
+                key={project.name}
+                className={`rounded-xl border border-l-[6px] border-acid/55 border-l-acid bg-acid/14 px-4 py-3 ${
+                  project.wide ? 'col-span-2' : ''
+                }`}
+              >
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-[20px] text-paper">
+                    {project.name}
+                  </span>
+                  <span className="text-[18px] text-paper">{project.role}</span>
+                  <span className="ml-auto text-[16px] text-paper">
+                    {project.scale}
+                  </span>
+                </div>
+                <p className="mt-1 text-[17px] text-paper">{project.duty}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-auto shrink-0 text-[19px] text-muted">
+            五個專案各自 build、各自部署，AI 一次只掛其中一個。
+          </p>
+        </ProjectPanel>
+      </div>
+
+      <p className="shrink-0 text-center text-[22px] text-paper">
+        專案會變成多個，不是為了趕流行，是因為模組、團隊與部署節奏都長大了。
+      </p>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
  * 04 why-split — 為什麼要拆專案
  * 強調色：coral（單一大 repo 的問題）／teal（拆開之後）
  * ════════════════════════════════════════════════════════════ */
@@ -779,6 +923,409 @@ export function OpenApiBridgeDemo() {
         ，給 AI 讀的是{' '}
         <span className="font-mono text-paper">openapi.json</span>
         。
+      </p>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+ * 06b postman — 同一份契約，給人看的那一面
+ *
+ * 用專案色票重畫 Postman，不嵌深色截圖：原截圖是深色 UI，
+ * 貼進紙面色票會變成整頁唯一一塊黑，也量不到對比。
+ *
+ * 兩類控制項的形狀語言刻意分開（這是這一輪的共用規範）：
+ * - 左側請求清單＝選項：一個群組方框，每一列自己沒有外框
+ * - Send／清除＝執行按鈕：獨立藥丸，前面各帶一個 ▶ / ↺ 字元
+ *
+ * 強調色：acid（選中的請求、POST、主要動作）／teal（GET、成功狀態碼）
+ * ════════════════════════════════════════════════════════════ */
+
+type HttpMethod = 'GET' | 'POST';
+type PostmanTab = 'Params' | 'Headers' | 'Body';
+
+const postmanTabs: PostmanTab[] = ['Params', 'Headers', 'Body'];
+
+interface KeyValueRow {
+  key: string;
+  value: string;
+  note: string;
+}
+
+interface PostmanRequest {
+  id: string;
+  folder: string;
+  method: HttpMethod;
+  path: string;
+  label: string;
+  params: KeyValueRow[];
+  headers: KeyValueRow[];
+  /** GET 沒有 Body，用 null 而不是空字串，型別上就分得出來 */
+  body: string | null;
+  status: string;
+  meta: string;
+  response: string;
+}
+
+const jsonHeader: KeyValueRow = {
+  key: 'Content-Type',
+  value: 'application/json',
+  note: 'Collection 層級就設好',
+};
+
+const authHeader: KeyValueRow = {
+  key: 'Authorization',
+  value: 'Bearer {{token}}',
+  note: '登入之後自動帶上',
+};
+
+const postmanFolders = ['Auth', 'Products', 'Coupons', 'Orders', 'Admin'];
+
+const postmanRequests: PostmanRequest[] = [
+  {
+    id: 'login',
+    folder: 'Auth',
+    method: 'POST',
+    path: '/api/auth/login',
+    label: '登入取得 token',
+    params: [],
+    headers: [jsonHeader],
+    body: '{\n  "email": "demo@shop.dev",\n  "password": "demo1234"\n}',
+    status: '200 OK',
+    meta: '312 ms · 0.6 KB',
+    response:
+      '{\n  "success": true,\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",\n  "expired": 1789200000\n}',
+  },
+  {
+    id: 'products',
+    folder: 'Products',
+    method: 'GET',
+    path: '/api/products',
+    label: '商品列表',
+    params: [
+      { key: 'page', value: '1', note: '第幾頁' },
+      { key: 'category', value: 'shoes', note: '分類篩選' },
+    ],
+    headers: [jsonHeader],
+    body: null,
+    status: '200 OK',
+    meta: '128 ms · 2.4 KB',
+    response:
+      '{\n  "products": [\n    { "id": "p-01", "title": "經典帆布鞋", "price": 1280 },\n    { "id": "p-02", "title": "羊毛保暖襪", "price": 320 }\n  ]\n}',
+  },
+  {
+    id: 'product',
+    folder: 'Products',
+    method: 'GET',
+    path: '/api/products/{id}',
+    label: '單一商品',
+    params: [{ key: 'id', value: 'p-01', note: '路徑參數' }],
+    headers: [jsonHeader],
+    body: null,
+    status: '200 OK',
+    meta: '96 ms · 0.8 KB',
+    response:
+      '{\n  "product": {\n    "id": "p-01", "title": "經典帆布鞋",\n    "price": 1280, "unit": "雙", "stock": 42\n  }\n}',
+  },
+  {
+    id: 'coupon',
+    folder: 'Coupons',
+    method: 'POST',
+    path: '/api/coupons',
+    label: '建立優惠券',
+    params: [],
+    headers: [jsonHeader, authHeader],
+    body: '{\n  "code": "SUMMER20",\n  "percent": 80\n}',
+    status: '201 Created',
+    meta: '204 ms · 0.5 KB',
+    response:
+      '{\n  "success": true,\n  "coupon": { "id": "c-07", "code": "SUMMER20", "percent": 80 }\n}',
+  },
+  {
+    id: 'order',
+    folder: 'Orders',
+    method: 'POST',
+    path: '/api/orders',
+    label: '送出訂單',
+    params: [],
+    headers: [jsonHeader, authHeader],
+    body: '{\n  "user": { "name": "王小明", "email": "demo@shop.dev" },\n  "products": { "p-01": 2 }\n}',
+    status: '201 Created',
+    meta: '286 ms · 0.9 KB',
+    response:
+      '{\n  "success": true,\n  "orderId": "o-1045",\n  "total": 2560,\n  "paid": false\n}',
+  },
+  {
+    id: 'admin-orders',
+    folder: 'Admin',
+    method: 'GET',
+    path: '/api/admin/orders',
+    label: '後台訂單',
+    params: [{ key: 'page', value: '1', note: '第幾頁' }],
+    headers: [authHeader],
+    body: null,
+    status: '200 OK',
+    meta: '173 ms · 3.1 KB',
+    response:
+      '{\n  "orders": [\n    { "id": "o-1043", "total": 2880, "paid": true },\n    { "id": "o-1044", "total": 640, "paid": false }\n  ]\n}',
+  },
+];
+
+/** 選中的那一列整條是 acid，method 標籤改用不透明淺底，避免同色疊同色 */
+function methodBadgeClass(method: HttpMethod, selected: boolean): string {
+  if (selected) return 'bg-panel text-paper';
+  return method === 'GET' ? 'bg-teal text-on-accent' : 'bg-acid text-on-accent';
+}
+
+/** 執行按鈕：藥丸形，跟左側方框群組的選項在形狀上就分得開 */
+const runPill =
+  'rounded-full border-2 border-acid bg-acid px-6 py-2 text-[19px] text-on-accent transition-colors';
+const resetPill =
+  'rounded-full border-2 border-line bg-panel px-6 py-2 text-[19px] text-paper transition-colors hover:border-acid';
+const idlePill =
+  'rounded-full border-2 border-line-soft bg-panel px-6 py-2 text-[19px] text-faint';
+
+function KeyValueTable({
+  rows,
+  empty,
+}: {
+  rows: KeyValueRow[];
+  empty: string;
+}) {
+  if (rows.length === 0) {
+    return <p className="text-[19px] text-muted">{empty}</p>;
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-6">
+        <span className="w-[240px] font-display text-[16px] tracking-[0.16em] text-faint uppercase">
+          Key
+        </span>
+        <span className="w-[300px] font-display text-[16px] tracking-[0.16em] text-faint uppercase">
+          Value
+        </span>
+        <span className="flex-1 font-display text-[16px] tracking-[0.16em] text-faint uppercase">
+          說明
+        </span>
+      </div>
+      {rows.map((row) => (
+        <div key={row.key} className="flex gap-6">
+          <span className="w-[240px] font-mono text-[18px] text-paper">
+            {row.key}
+          </span>
+          <span className="w-[300px] font-mono text-[18px] text-paper">
+            {row.value}
+          </span>
+          <span className="flex-1 text-[17px] text-muted">{row.note}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const SEND_DELAY = 600;
+
+export function PostmanDemo() {
+  const [selectedId, setSelectedId] = useState(postmanRequests[0].id);
+  const [tab, setTab] = useState<PostmanTab>('Body');
+  const [sending, setSending] = useState(false);
+  const [answeredId, setAnsweredId] = useState<string | null>(null);
+
+  const current =
+    postmanRequests.find((item) => item.id === selectedId) ?? postmanRequests[0];
+  const answered = !sending && answeredId === current.id;
+
+  useEffect(() => {
+    if (!sending) return;
+    const timer = setTimeout(() => {
+      setAnsweredId(selectedId);
+      setSending(false);
+    }, SEND_DELAY);
+    return () => clearTimeout(timer);
+  }, [sending, selectedId]);
+
+  /** 換一支請求就把回應收掉：畫面上不會留著上一支的結果 */
+  function selectRequest(request: PostmanRequest) {
+    setSelectedId(request.id);
+    setTab(request.body ? 'Body' : 'Params');
+    setSending(false);
+    setAnsweredId(null);
+  }
+
+  return (
+    <div className="flex w-full max-w-[1680px] flex-col gap-4">
+      <div className="flex h-[560px] shrink-0 gap-6">
+        {/* 選項：一整個群組方框，每一列自己沒有外框 */}
+        <div className="flex w-[440px] shrink-0 flex-col rounded-2xl border border-line bg-ink-soft p-4">
+          <header className="shrink-0 px-2">
+            <p className="font-display text-[17px] tracking-[0.16em] text-faint uppercase">
+              Collection
+            </p>
+            <p className="mt-1 text-[21px] text-paper">
+              電商 API（openapi.json 轉出）
+            </p>
+          </header>
+
+          <div className="mt-3">
+            {postmanFolders.map((folder) => (
+              <div key={folder}>
+                <p className="px-2 pt-2 pb-1 font-display text-[16px] tracking-[0.16em] text-faint uppercase">
+                  ▾ {folder}
+                </p>
+                {postmanRequests
+                  .filter((request) => request.folder === folder)
+                  .map((request) => {
+                    const selected = request.id === current.id;
+                    return (
+                      <button
+                        key={request.id}
+                        type="button"
+                        onClick={() => selectRequest(request)}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ${
+                          selected
+                            ? 'bg-acid text-on-accent'
+                            : 'text-muted hover:text-paper'
+                        }`}
+                      >
+                        <span
+                          className={`rounded px-2 py-0.5 font-mono text-[16px] ${methodBadgeClass(
+                            request.method,
+                            selected,
+                          )}`}
+                        >
+                          {request.method}
+                        </span>
+                        <span className="font-mono text-[17px]">
+                          {request.path}
+                        </span>
+                        <span className="ml-auto text-[16px]">
+                          {request.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col rounded-2xl border border-line bg-panel p-5">
+          <div className="flex h-[56px] shrink-0 items-center gap-3 rounded-xl border border-line-soft bg-ink-soft px-4">
+            <span
+              className={`rounded px-2 py-0.5 font-mono text-[17px] ${methodBadgeClass(
+                current.method,
+                false,
+              )}`}
+            >
+              {current.method}
+            </span>
+            <span className="font-mono text-[20px] text-paper">
+              {`{{baseUrl}}${current.path}`}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setSending(true)}
+              disabled={sending}
+              className={`ml-auto ${sending ? idlePill : runPill}`}
+            >
+              {sending ? '▶ 傳送中…' : '▶ Send'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setAnsweredId(null)}
+              disabled={!answered}
+              className={answered ? resetPill : idlePill}
+            >
+              ↺ 清除回應
+            </button>
+          </div>
+
+          {/* 分頁列也是選項，走同一組群組方框樣式 */}
+          <div className="mt-3 flex shrink-0 items-center gap-3">
+            <span className="text-[16px] text-faint">請求內容</span>
+            <div className="inline-flex items-center gap-1 rounded-xl border border-line bg-ink-soft p-1">
+              {postmanTabs.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setTab(item)}
+                  className={`rounded-lg px-5 py-1.5 text-[19px] transition-colors ${
+                    tab === item
+                      ? 'bg-acid text-on-accent'
+                      : 'text-muted hover:text-paper'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <span className="ml-auto text-[18px] text-muted">
+              {current.label}
+            </span>
+          </div>
+
+          <div className="mt-3 h-[140px] shrink-0 overflow-hidden rounded-xl border border-line-soft bg-ink-soft px-5 py-3">
+            {tab === 'Params' && (
+              <KeyValueTable
+                rows={current.params}
+                empty="這一支沒有 query 參數。"
+              />
+            )}
+            {tab === 'Headers' && (
+              <KeyValueTable rows={current.headers} empty="沒有額外的標頭。" />
+            )}
+            {tab === 'Body' &&
+              (current.body ? (
+                <pre className="font-mono text-[17px] leading-[1.5] whitespace-pre text-paper">
+                  {current.body}
+                </pre>
+              ) : (
+                <p className="text-[19px] text-muted">
+                  GET 請求沒有 Body，參數寫在 Params。
+                </p>
+              ))}
+          </div>
+
+          <div className="mt-3 flex min-h-0 flex-1 flex-col">
+            <div className="flex shrink-0 items-center gap-4">
+              <span className="font-display text-[17px] tracking-[0.16em] text-faint uppercase">
+                Response
+              </span>
+              {answered && (
+                <>
+                  <span className="text-[19px] text-teal">{current.status}</span>
+                  <span className="text-[17px] text-muted">{current.meta}</span>
+                </>
+              )}
+            </div>
+
+            {answered ? (
+              <div className="mt-2 flex-1 overflow-hidden rounded-xl border border-line-soft bg-ink-soft px-5 py-3">
+                <pre className="font-mono text-[17px] leading-[1.5] whitespace-pre text-paper">
+                  {current.response}
+                </pre>
+              </div>
+            ) : (
+              <div className="mt-2 flex flex-1 items-center justify-center rounded-xl border border-dashed border-line-soft">
+                <p className="text-[19px] text-muted">
+                  {sending
+                    ? '傳送中…'
+                    : '按下 ▶ Send，這裡會顯示狀態碼與回應 JSON'}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <p className="shrink-0 text-center text-[19px] text-muted">
+        這份 Collection 是{' '}
+        <span className="font-mono text-paper">openapi.json</span>
+        {' '}用{' '}
+        <span className="font-mono text-paper">openapi-to-postmanv2</span>
+        {' '}轉出來的 —— 同一份文件，AI 讀 json、人用點的。
       </p>
     </div>
   );

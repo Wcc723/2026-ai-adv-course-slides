@@ -17,40 +17,85 @@ import { useEffect, useState } from 'react';
  * 共用零件
  * ════════════════════════════════════════════════════════════ */
 
-type Tone = 'acid';
+/**
+ * 選項與動作用兩種不同的形狀語言，投影出去也分得出來：
+ * - 選項（挑情境）＝ 一個方框群組，選項自己沒有外框，選中的那個才實心
+ * - 動作（真的會跑東西）＝ 獨立藥丸，前面帶一個字元（▶ 執行、↺ 重來）
+ * 之前兩者共用同一個按鈕樣式，結果台下分不出哪個是選單、哪個是按鈕。
+ */
 
-/** 選中／主要動作：實心對比。hover 換邊框色，不動透明度以免壓低對比 */
-const SOLID_FACE: Record<Tone, string> = {
-  acid: 'border-acid bg-acid text-on-accent hover:border-paper',
-};
+interface OptionItem<T extends string> {
+  id: T;
+  label: string;
+}
 
-const IDLE_FACE =
-  'border-line-soft bg-panel-lift text-muted hover:border-line hover:text-paper';
-
-const DISABLED_FACE = 'cursor-not-allowed border-line-soft bg-panel-lift text-faint';
-
-function DemoButton({
+function OptionGroup<T extends string>({
   label,
-  tone,
-  selected = false,
+  options,
+  value,
+  onSelect,
+}: {
+  label: string;
+  options: readonly OptionItem<T>[];
+  value: T;
+  onSelect: (next: T) => void;
+}) {
+  return (
+    <div className="flex shrink-0 items-center gap-3">
+      <span className="text-[16px] tracking-[0.14em] text-faint">{label}</span>
+      <div className="inline-flex items-center gap-1 rounded-xl border border-line bg-ink-soft p-1">
+        {options.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            onClick={() => onSelect(option.id)}
+            className={`rounded-lg px-5 py-1.5 text-[19px] transition-colors ${
+              option.id === value
+                ? 'bg-acid text-on-accent'
+                : 'text-muted hover:text-paper'
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** 主要動作實心、次要動作只有描邊；停用態用 faint（對 panel 7.39:1） */
+const ACTION_FACE = {
+  primary: 'border-acid bg-acid text-on-accent hover:border-paper',
+  secondary: 'border-line bg-panel text-paper hover:border-acid',
+} as const;
+
+const ACTION_GLYPH = { primary: '▶', secondary: '↺' } as const;
+
+function ActionButton({
+  label,
+  variant = 'primary',
   disabled = false,
   onClick,
 }: {
   label: string;
-  tone: Tone;
-  selected?: boolean;
+  variant?: keyof typeof ACTION_FACE;
   disabled?: boolean;
   onClick: () => void;
 }) {
-  const face = disabled ? DISABLED_FACE : selected ? SOLID_FACE[tone] : IDLE_FACE;
+  const face = disabled
+    ? 'cursor-not-allowed border-line-soft bg-panel text-faint'
+    : ACTION_FACE[variant];
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`shrink-0 rounded-lg border-2 px-5 py-2 text-[19px] transition-colors ${face}`}
+      className={`shrink-0 rounded-full border-2 px-6 py-2 text-[19px] transition-colors ${face}`}
     >
+      <span aria-hidden="true" className="mr-1.5">
+        {ACTION_GLYPH[variant]}
+      </span>
       {label}
     </button>
   );
@@ -356,6 +401,11 @@ const FLOW_LEGEND: { label: string; dot: string }[] = [
   { label: '失敗', dot: 'bg-error' },
 ];
 
+const SCENARIO_OPTIONS: readonly OptionItem<FlowScenario>[] = [
+  { id: 'pass', label: '成功' },
+  { id: 'fail', label: '失敗' },
+];
+
 const PIPELINE_X = [50, 470, 890, 1310];
 const JOB_X = [136, 505, 874, 1243];
 
@@ -409,20 +459,11 @@ export function CiFlowDemo() {
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
       <div className="flex shrink-0 items-center gap-4">
-        <span className="font-display text-[18px] tracking-[0.16em] text-faint">
-          情境
-        </span>
-        <DemoButton
-          label="成功"
-          tone="acid"
-          selected={scenario === 'pass'}
-          onClick={() => pick('pass')}
-        />
-        <DemoButton
-          label="失敗"
-          tone="acid"
-          selected={scenario === 'fail'}
-          onClick={() => pick('fail')}
+        <OptionGroup
+          label="情境"
+          options={SCENARIO_OPTIONS}
+          value={scenario}
+          onSelect={pick}
         />
 
         <div className="ml-8 flex items-center gap-6">
@@ -435,14 +476,12 @@ export function CiFlowDemo() {
         </div>
 
         <div className="ml-auto flex items-center gap-3">
-          <DemoButton
+          <ActionButton
             label="git push"
-            tone="acid"
-            selected
             disabled={outcome === 'running'}
             onClick={play}
           />
-          <DemoButton label="重播" tone="acid" onClick={play} />
+          <ActionButton label="重播" variant="secondary" onClick={play} />
         </div>
       </div>
 

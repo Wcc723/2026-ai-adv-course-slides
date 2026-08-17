@@ -17,35 +17,38 @@ import { Fragment, useEffect, useState } from 'react';
  * 共用小零件
  * ──────────────────────────────────────────────────────────── */
 
-const GHOST_BUTTON: string =
-  'border-line-soft bg-panel-lift text-muted hover:border-line hover:text-paper';
-const SOLID_BUTTON: string = 'border-acid bg-acid text-on-accent';
-
-/** 一般按鈕。disabled 不用 opacity，改換成 faint 文字避免掉出 4.5:1 */
+/**
+ * 執行按鈕：藥丸形、有外框、文字前帶一個字元。
+ * 刻意跟下面的 Segment（方框群組、內層沒有外框）長得不一樣 ——
+ * 投影出去時要一眼分得出「這是動作」還是「這是選項」。
+ * disabled 不用 opacity，改換成 faint 文字避免掉出 4.5:1。
+ */
 function ToolButton({
   label,
-  active = false,
+  variant = 'primary',
   disabled = false,
   onClick,
 }: {
   label: string;
-  active?: boolean;
+  variant?: 'primary' | 'secondary';
   disabled?: boolean;
   onClick: () => void;
 }) {
+  const primary = variant === 'primary';
   const tone = disabled
     ? 'border-line-soft bg-panel text-faint'
-    : active
-      ? SOLID_BUTTON
-      : GHOST_BUTTON;
+    : primary
+      ? 'border-acid bg-acid text-on-accent'
+      : 'border-line bg-panel text-paper hover:border-acid';
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-lg border px-5 py-2 text-[19px] transition-colors ${tone}`}
+      className={`rounded-full border-2 px-6 py-2 text-[19px] transition-colors ${tone}`}
     >
+      {primary ? '▶ ' : '↺ '}
       {label}
     </button>
   );
@@ -56,30 +59,40 @@ interface SegmentOption<T extends string> {
   label: string;
 }
 
-/** 情境切換：選中態用實心 acid，未選中維持 panel-lift 的低調樣式 */
+/**
+ * 選項／模式切換：一個群組方框裝住所有選項，選項自己沒有外框。
+ * 左邊固定放一個小標說明「這一組在選什麼」，避免跟執行按鈕混在一起。
+ */
 function Segment<T extends string>({
+  label,
   options,
   value,
   onChange,
 }: {
+  label: string;
   options: readonly SegmentOption<T>[];
   value: T;
   onChange: (next: T) => void;
 }) {
   return (
-    <div className="flex gap-2">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          onClick={() => onChange(option.value)}
-          className={`rounded-lg border px-5 py-2 text-[19px] transition-colors ${
-            option.value === value ? SOLID_BUTTON : GHOST_BUTTON
-          }`}
-        >
-          {option.label}
-        </button>
-      ))}
+    <div className="flex items-center gap-2">
+      <span className="text-[16px] text-faint">{label}</span>
+      <div className="inline-flex items-center gap-1 rounded-xl border border-line bg-ink-soft p-1">
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+            className={`rounded-lg px-5 py-1.5 text-[19px] transition-colors ${
+              option.value === value
+                ? 'bg-acid text-on-accent'
+                : 'text-muted hover:text-paper'
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -133,9 +146,16 @@ function shellClass(state: CardState): string {
  * 1. WhyTestDemo — 為什麼需要測試
  * ──────────────────────────────────────────────────────────── */
 
-/** 第 3 步注入錯誤後的累積偏移；越晚發現，跟預期的落差越大 */
+/** 第 3 步注入新功能之後的累積偏移；越晚發現，跟預期的落差越大 */
 const DRIFTS: readonly number[] = [0, 0, 0, 1, 3, 8, 15, 24, 35, 48];
 const BUG_INDEX: number = 2;
+
+type WhyMode = 'off' | 'on';
+
+const WHY_MODES: readonly SegmentOption<WhyMode>[] = [
+  { value: 'off', label: '不加測試' },
+  { value: 'on', label: '加入測試' },
+];
 const BASE_Y: number = 130;
 const DRIFT_SCALE: number = 4.2;
 
@@ -168,20 +188,24 @@ export function WhyTestDemo() {
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-5">
       <div className="flex flex-wrap items-center gap-3">
+        <Segment
+          label="模式"
+          options={WHY_MODES}
+          value={testOn ? 'on' : 'off'}
+          onChange={(next) => {
+            setTestOn(next === 'on');
+            setCurrent(0);
+          }}
+        />
         <ToolButton
           label="往前一步"
-          active
           disabled={visible >= lastIndex}
           onClick={() => setCurrent((n) => Math.min(n + 1, lastIndex))}
         />
-        <ToolButton label="重來" onClick={() => setCurrent(0)} />
         <ToolButton
-          label={testOn ? '✓ 已加入測試' : '加入測試'}
-          active={testOn}
-          onClick={() => {
-            setTestOn((on) => !on);
-            setCurrent(0);
-          }}
+          label="重來"
+          variant="secondary"
+          onClick={() => setCurrent(0)}
         />
         <span className="ml-auto text-[18px] text-faint">
           每個節點代表一次 commit
@@ -198,7 +222,8 @@ export function WhyTestDemo() {
             className="h-auto w-full"
           >
             <title>
-              第 3 步注入的錯誤沒有被測試擋下，之後每一次 commit 都讓實際結果離預期更遠
+              第 3 步注入的新功能弄壞了既有行為，沒有被測試擋下，之後每一次 commit
+              都讓實際結果離預期更遠
             </title>
 
             {/* 圖例 */}
@@ -324,7 +349,7 @@ export function WhyTestDemo() {
               </g>
             )}
 
-            {/* 錯誤注入點的標註 */}
+            {/* 新功能注入點的標註 */}
             <text
               x={nodeX(BUG_INDEX)}
               y={88}
@@ -333,7 +358,7 @@ export function WhyTestDemo() {
               fontSize={24}
               fontWeight={600}
             >
-              {testOn ? '測試在第 3 步擋下' : '第 3 步注入錯誤'}
+              {testOn ? '測試在第 3 步擋下' : '第 3 步注入新功能'}
             </text>
 
             {/* 節點編號 */}
@@ -381,8 +406,9 @@ export function WhyTestDemo() {
       </div>
 
       <p className="text-[19px] text-muted">
-        錯誤越晚被發現，要回溯的範圍越大。測試不會讓錯誤消失，它讓錯誤在第 3
-        步就停下來。
+        第 3
+        步加的新功能悄悄弄壞了既有行為，沒有測試擋下來，之後每一次改動都讓落差更大。測試不會讓新功能不出錯，它讓出錯的那一步停在第
+        3 步。
       </p>
     </div>
   );
@@ -455,6 +481,13 @@ function calcDiscount(price: number, coupon: Coupon, skipMin: boolean): number {
 const UNIT_GRID: string =
   'grid-cols-[minmax(0,1.5fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)]';
 
+type UnitVariant = 'clean' | 'buggy';
+
+const UNIT_VARIANTS: readonly SegmentOption<UnitVariant>[] = [
+  { value: 'clean', label: '正確版本' },
+  { value: 'buggy', label: '注入 bug' },
+];
+
 export function UnitTestDemo() {
   /* 逐列跑測試：target 是「要跑到第幾列」，running 由它推導出來，
      effect 裡就不必同步呼叫 setState（react-hooks/set-state-in-effect） */
@@ -494,24 +527,24 @@ export function UnitTestDemo() {
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
+        <Segment
+          label="受測程式"
+          options={UNIT_VARIANTS}
+          value={buggy ? 'buggy' : 'clean'}
+          onChange={(next) => {
+            setBuggy(next === 'buggy');
+            reset();
+          }}
+        />
         <ToolButton
           label="執行測試"
-          active
           disabled={running}
           onClick={() => {
             setRevealed(0);
             setTarget(UNIT_CASES.length);
           }}
         />
-        <ToolButton label="重來" onClick={reset} />
-        <ToolButton
-          label={buggy ? '✓ 已注入 bug' : '注入 bug'}
-          active={buggy}
-          onClick={() => {
-            setBuggy((on) => !on);
-            reset();
-          }}
-        />
+        <ToolButton label="重來" variant="secondary" onClick={reset} />
         <span className="ml-auto font-mono text-[17px] text-faint">
           discount.test.ts
         </span>
@@ -754,6 +787,7 @@ export function IntegrationTestDemo() {
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <Segment
+          label="情境"
           options={INTEGRATION_OPTIONS}
           value={scenario}
           onChange={(next) => {
@@ -764,7 +798,6 @@ export function IntegrationTestDemo() {
         />
         <ToolButton
           label={isUnit ? '執行三支單元測試' : '執行整合測試'}
-          active
           disabled={running}
           onClick={() => {
             setProgress(0);
@@ -1087,11 +1120,15 @@ export function ContractTestDemo() {
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        <Segment options={CONTRACT_MODES} value={mode} onChange={setMode} />
+        <Segment
+          label="檢視方式"
+          options={CONTRACT_MODES}
+          value={mode}
+          onChange={setMode}
+        />
         {mode === 'collection' && (
           <ToolButton
             label="執行 Collection"
-            active
             disabled={running}
             onClick={() => {
               setChecked(0);
@@ -1101,6 +1138,7 @@ export function ContractTestDemo() {
         )}
         <ToolButton
           label="重來"
+          variant="secondary"
           onClick={() => {
             if (mode === 'inspect') {
               setRevealed([]);
@@ -1602,6 +1640,7 @@ export function E2eTestDemo() {
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <Segment
+          label="模式"
           options={E2E_MODE_OPTIONS}
           value={mode}
           onChange={(next) => {
@@ -1610,6 +1649,7 @@ export function E2eTestDemo() {
           }}
         />
         <Segment
+          label="情境"
           options={E2E_OPTIONS}
           value={scenario}
           onChange={(next) => {
@@ -1622,7 +1662,6 @@ export function E2eTestDemo() {
         {isManual ? (
           <ToolButton
             label="人工點下一頁"
-            active
             disabled={finished}
             onClick={() => {
               const next = Math.min(progress + 1, limit);
@@ -1633,7 +1672,6 @@ export function E2eTestDemo() {
         ) : (
           <ToolButton
             label="執行 E2E 測試"
-            active
             disabled={running}
             onClick={() => {
               setProgress(0);
@@ -1641,7 +1679,7 @@ export function E2eTestDemo() {
             }}
           />
         )}
-        <ToolButton label="重來" onClick={resetRun} />
+        <ToolButton label="重來" variant="secondary" onClick={resetRun} />
         <span className="ml-auto flex items-center gap-3 text-[18px] text-faint">
           範例分支
           <BranchChip

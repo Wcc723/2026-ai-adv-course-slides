@@ -209,6 +209,17 @@ export function ModularTestDemo() {
 
 /* ────────────────────────────────────────────────────────────
  * 31. 善用不同 Session / Model / Effort / SubAgent
+ *
+ * 這一頁要同時看見兩件事，缺一個就會教錯：
+ *
+ *   1. 上下文「去了哪裡」。換 Session 或開 SubAgent 不會讓上下文消失，
+ *      是換一個地方承接它，所以主 Session 與另一邊各給一條長條。
+ *      另開新的 Session → 主 Session 掉回基準，長的是新的那一個。
+ *   2. 這一次任務的相對成本。Model / Effort / SubAgent 都會加預算，
+ *      換不換 Session 則完全不影響 —— 這個對比是本頁的重點。
+ *
+ * 四組控制項全部都是「選項」（這一頁沒有執行按鈕），所以一律用
+ * 方框群組 + 無邊框 chip；藥丸形在本專案保留給「▶ 執行 / ↺ 重來」。
  * ──────────────────────────────────────────────────────────── */
 
 type ModelId = 'Opus' | 'Sonnet' | 'Haiku';
@@ -235,17 +246,49 @@ const effortNotes: Record<EffortId, string> = {
   high: '先規劃再動手，慢，但不容易改壞既有邏輯',
 };
 
-/**
- * Effort 不只決定想得多深，也決定 Context 吃多少：
- * 推理輪數與工具呼叫越多，進到主 Session 的中間產物就越多。
- * 幅度刻意壓在 ±10，讓 SubAgent（-70）仍然是最大的那一刀。
+/* ── 上下文模型 ───────────────────────────────────────────────
+ * 主 Session 原本就有的專案脈絡，不管怎麼換都在。
  */
-const effortContextDelta: Record<EffortId, number> = {
-  low: -10,
-  medium: 0,
-  high: 10,
+const CONTEXT_BASE = 22;
+
+/**
+ * 這一次任務會產生的量（測試輸出 + stack trace + 推理紀錄）。
+ * Effort 越高，推理輪數與工具呼叫越多，產生的量就越多 ——
+ * 但這一份量是落在「實際承接工作的那一邊」，不一定是主 Session。
+ */
+const effortWorkload: Record<EffortId, number> = {
+  low: 46,
+  medium: 58,
+  high: 72,
 };
 
+/** 另開新 Session 要重新帶進去的檔案與失敗訊息 */
+const FRESH_SEED = 14;
+/** SubAgent 自己的起手脈絡 */
+const AGENT_SEED = 10;
+/** SubAgent 回報給上一層的摘要，只佔原本產出的一小截 */
+const SUMMARY_RATIO = 0.18;
+
+/* ── 成本模型（示意，非真實報價）─────────────────────────────
+ * 一律用相對倍率：以 Sonnet + medium + 不開 SubAgent 為 1×。
+ */
+const modelCost: Record<ModelId, number> = { Opus: 3, Sonnet: 1, Haiku: 0.35 };
+const effortCost: Record<EffortId, number> = { low: 0.6, medium: 1, high: 1.7 };
+/** SubAgent 會多算一份代理自己的用量：省的是主 Session 的上下文，不是總花費 */
+const SUBAGENT_SHARE = 0.4;
+/** 長條滿格用的上限：Opus × high × 開 SubAgent */
+const MAX_COST = 3 * 1.7 * (1 + SUBAGENT_SHARE);
+
+/** 3 →「3」、1.7 → 「1.7」、0.35 → 「0.35」 */
+function formatMultiplier(value: number): string {
+  return value.toFixed(2).replace(/\.?0+$/, '');
+}
+
+/**
+ * 選項群組：外面一個方盒把同一組框起來，裡面的 chip 自己沒有邊框，
+ * 左邊掛一個小標說明這一組在選什麼。形狀刻意跟執行按鈕（藥丸形 + 前置
+ * 字元）分開，投影出去也能一眼看出「這是選項，不是按下去會跑的鈕」。
+ */
 function ToolGroup({
   label,
   children,
@@ -254,16 +297,17 @@ function ToolGroup({
   children: ReactNode;
 }) {
   return (
-    <div>
-      <p className="font-display text-[17px] tracking-[0.14em] text-faint">
-        {label}
-      </p>
-      <div className="mt-1.5 flex gap-2">{children}</div>
+    <div className="flex items-center gap-3">
+      <span className="w-[92px] shrink-0 text-[16px] text-faint">{label}</span>
+      <div className="inline-flex items-center gap-1 rounded-xl border border-line bg-ink-soft p-1">
+        {children}
+      </div>
     </div>
   );
 }
 
-function PillButton({
+/** 群組裡的單一選項。本頁強調色只有 teal / coral 兩支，選中態沿用 teal。 */
+function OptionChip({
   active,
   onClick,
   children,
@@ -277,12 +321,49 @@ function PillButton({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-lg border px-4 py-2 font-mono text-[18px] transition-colors ${
-        active ? toneStyles.teal.solid : idleControl
+      className={`rounded-lg px-5 py-1.5 text-[19px] transition-colors ${
+        active ? 'bg-teal text-on-accent' : 'text-muted hover:text-paper'
       }`}
     >
       {children}
     </button>
+  );
+}
+
+/** 一條「上下文落在哪裡」的長條。neutral 用在「沒有另一邊」。 */
+function ContextRow({
+  label,
+  pct,
+  note,
+  tone,
+}: {
+  label: string;
+  pct: number;
+  note: string;
+  tone: Tone | 'neutral';
+}) {
+  const shell =
+    tone === 'neutral'
+      ? 'border border-line bg-ink-soft'
+      : toneStyles[tone].card;
+  const bar = tone === 'neutral' ? 'bg-line' : toneStyles[tone].bar;
+
+  return (
+    <div className={`rounded-xl px-5 py-3 ${shell}`}>
+      <div className="flex items-baseline justify-between gap-4">
+        <p className="text-[20px] text-paper">{label}</p>
+        <p className="font-display text-[30px] leading-none text-paper">
+          {pct}%
+        </p>
+      </div>
+      <div className="mt-2 h-3.5 w-full overflow-hidden rounded-full bg-panel">
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${bar}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <p className="mt-2 text-[17px] text-paper">{note}</p>
+    </div>
   );
 }
 
@@ -292,133 +373,193 @@ export function ModelSwitchDemo() {
   const [session, setSession] = useState<SessionId>('keep');
   const [subAgent, setSubAgent] = useState(false);
 
-  /* 基準由 Session / SubAgent 決定：開了 SubAgent，測試輸出根本不會進來 */
-  const contextBase = subAgent ? 18 : session === 'keep' ? 88 : 40;
-  /* Effort 再往上推或往下拉，最後夾在 5–99 之間 */
-  const delta = effortContextDelta[effort];
-  const contextPct = Math.min(99, Math.max(5, contextBase + delta));
-  const tone: Tone = contextPct >= 70 ? 'coral' : 'teal';
+  /* 這一次任務產生的量：由 effort 決定，落在誰身上由 Session / SubAgent 決定 */
+  const workload = effortWorkload[effort];
+  const summary = Math.round(workload * SUMMARY_RATIO);
+  const hasOther = subAgent || session === 'fresh';
 
-  const baseNote = subAgent
-    ? '測試 log 留在子代理裡，主 Session 只收到一段摘要。'
-    : session === 'keep'
-      ? '整份測試輸出、stack trace 與先前的對話全部疊在同一個 Session。'
-      : '換一個乾淨的 Session，只帶進這次要修的檔案與失敗訊息。';
+  /* 主 Session：只有「沿用目前 + 不開 SubAgent」時才會把整份輸出背在身上 */
+  const mainPct =
+    session === 'fresh'
+      ? CONTEXT_BASE
+      : subAgent
+        ? CONTEXT_BASE + summary
+        : Math.min(99, CONTEXT_BASE + workload);
 
-  /* high + 沿用同一個 Session：基準本來就滿，推理紀錄又全部疊上去 */
-  const worstCombo = effort === 'high' && !subAgent && session === 'keep';
+  /* 另一邊：實際承接測試輸出的那個地方 */
+  const otherPct = hasOther
+    ? Math.min(99, (subAgent ? AGENT_SEED : FRESH_SEED) + workload)
+    : 0;
 
-  const effortNote =
-    delta === 0
-      ? `effort medium 維持 ${contextBase}% 的基準，沒有多餘的推理紀錄疊上來。`
-      : delta > 0
-        ? `effort high 多繞幾輪推理、多叫幾次工具，把基準再推高 ${delta} 個百分點${
-            worstCombo ? '，這是最貴的組合。' : '。'
-          }`
-        : `effort low 少想幾步、工具也少叫，把基準往下拉 ${-delta} 個百分點。`;
+  const otherLabel = subAgent
+    ? session === 'fresh'
+      ? '新 Session 裡的 SubAgent'
+      : 'SubAgent'
+    : hasOther
+      ? '新的 Session'
+      : '沒有另一邊';
+
+  const mainNote =
+    session === 'fresh'
+      ? '測試輸出不會進來，主 Session 停在原本就有的專案脈絡上。'
+      : subAgent
+        ? `只收到 SubAgent 回報的摘要，比基準多 ${summary} 個百分點。`
+        : '整份測試輸出、stack trace 與先前的對話全部疊在這裡。';
+
+  const otherNote = !hasOther
+    ? '全部都在主 Session，沒有第二個地方分擔這次產生的量。'
+    : subAgent
+      ? '測試輸出與 stack trace 在這裡展開，任務結束整包丟掉。'
+      : '帶進要修的檔案與失敗訊息，這次的輸出從這裡開始累積。';
+
+  const mainTone: Tone = mainPct >= 70 ? 'coral' : 'teal';
+
+  /* 相對成本：Model × Effort，開 SubAgent 再多算一份代理自己的用量 */
+  const costTotal =
+    modelCost[model] * effortCost[effort] * (1 + (subAgent ? SUBAGENT_SHARE : 0));
+  const costWidth = Math.max(3, Math.round((costTotal / MAX_COST) * 100));
+  const costTone: Tone = costTotal >= 2.5 ? 'coral' : 'teal';
+  const costBreakdown = `基準 × Model ${formatMultiplier(
+    modelCost[model],
+  )} × Effort ${formatMultiplier(effortCost[effort])}${
+    subAgent ? ` ＋ SubAgent ${SUBAGENT_SHARE} 份` : ''
+  }`;
 
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-4">
-      <div className="flex gap-8">
-        {/* 模擬的 AI 對話框 */}
-        <div className="flex flex-1 flex-col gap-5 rounded-2xl border border-line bg-panel-lift p-6">
-          <div className="flex flex-col gap-3">
-            <div className="max-w-[78%] self-end rounded-2xl rounded-br-md border border-line-soft bg-panel px-5 py-3 text-[20px] text-paper">
+      <div className="flex gap-6">
+        {/* 左：模擬的 AI 對話框與四組選項 */}
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="flex flex-col gap-3 rounded-2xl border border-line bg-panel-lift p-5">
+            <div className="max-w-[80%] self-end rounded-2xl rounded-br-md border border-line-soft bg-panel px-5 py-2.5 text-[20px] text-paper">
               幫我把 coupon 的折扣計算修好，測試要全綠
             </div>
-            <div className="max-w-[86%] rounded-2xl rounded-bl-md border border-line-soft bg-ink-soft px-5 py-3 text-[20px] text-paper">
-              我先跑 tests/unit/coupon.test.ts，把失敗的斷言整理成摘要再回報。
+            <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-line-soft bg-ink-soft px-5 py-2.5 text-[20px] text-paper">
+              我先跑 tests/unit/coupon.test.ts，整理失敗的斷言再回報。
             </div>
           </div>
 
-          {/* 工具列 */}
-          <div className="grid grid-cols-2 gap-x-8 gap-y-4 rounded-xl border border-line-soft bg-panel px-5 py-4">
-            <ToolGroup label="MODEL">
+          {/* 四組選項：方框群組，不是按下去會跑的執行鈕 */}
+          <div className="flex flex-col gap-3 rounded-xl border border-line-soft bg-panel px-5 py-4">
+            <ToolGroup label="模型">
               {models.map((item) => (
-                <PillButton
+                <OptionChip
                   key={item}
                   active={model === item}
                   onClick={() => setModel(item)}
                 >
                   {item}
-                </PillButton>
+                </OptionChip>
               ))}
             </ToolGroup>
 
-            <ToolGroup label="EFFORT">
+            <ToolGroup label="思考量">
               {efforts.map((item) => (
-                <PillButton
+                <OptionChip
                   key={item}
                   active={effort === item}
                   onClick={() => setEffort(item)}
                 >
                   {item}
-                </PillButton>
+                </OptionChip>
               ))}
             </ToolGroup>
 
-            <ToolGroup label="SESSION">
+            <ToolGroup label="Session">
               {sessionOptions.map((item) => (
-                <PillButton
+                <OptionChip
                   key={item.id}
                   active={session === item.id}
                   onClick={() => setSession(item.id)}
                 >
                   {item.label}
-                </PillButton>
+                </OptionChip>
               ))}
             </ToolGroup>
 
-            <ToolGroup label="SUBAGENT">
-              <PillButton active={!subAgent} onClick={() => setSubAgent(false)}>
-                關
-              </PillButton>
-              <PillButton active={subAgent} onClick={() => setSubAgent(true)}>
+            <ToolGroup label="SubAgent">
+              <OptionChip active={!subAgent} onClick={() => setSubAgent(false)}>
+                不開
+              </OptionChip>
+              <OptionChip active={subAgent} onClick={() => setSubAgent(true)}>
                 開
-              </PillButton>
+              </OptionChip>
             </ToolGroup>
           </div>
-        </div>
 
-        {/* 主 Session 的 Context 佔用 */}
-        <div className="flex w-[520px] shrink-0 flex-col gap-4">
-          <div className={`rounded-2xl px-7 py-5 ${toneStyles[tone].card}`}>
-            <p className="text-[19px] text-paper">主 Session 的 Context 佔用</p>
-            <p className="mt-1 font-display text-[60px] leading-none text-paper">
-              {contextPct}%
-            </p>
-            <div className="mt-4 h-4 w-full overflow-hidden rounded-full bg-panel">
-              <div
-                className={`h-full rounded-full transition-all duration-300 ${toneStyles[tone].bar}`}
-                style={{ width: `${contextPct}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 rounded-xl border border-line bg-ink-soft px-6 py-4">
-            <p className="text-[19px] text-paper">{baseNote}</p>
-            <p className="text-[19px] text-paper">{effortNote}</p>
-          </div>
-
-          <div className="flex flex-col gap-2 rounded-xl border border-line bg-ink-soft px-6 py-4">
-            <p className="text-[19px] text-muted">
+          <div className="flex flex-col gap-1.5 rounded-xl border border-line bg-ink-soft px-5 py-3">
+            <p className="text-[18px] text-muted">
               <span className="mr-3 font-mono text-paper">{model}</span>
               {modelNotes[model]}
             </p>
-            <p className="text-[19px] text-muted">
-              <span className="mr-3 font-mono text-paper">
-                effort: {effort}
-              </span>
+            <p className="text-[18px] text-muted">
+              <span className="mr-3 font-mono text-paper">effort: {effort}</span>
               {effortNotes[effort]}
+            </p>
+          </div>
+        </div>
+
+        {/* 右：上下文去向 + 成本試算，兩塊都要看得到 */}
+        <div className="flex w-[700px] shrink-0 flex-col gap-3">
+          <div className="flex flex-col gap-2.5 rounded-2xl border border-line-soft bg-panel px-5 py-4">
+            <div className="flex items-baseline justify-between gap-4">
+              <p className="font-display text-[17px] tracking-[0.14em] text-faint">
+                上下文去了哪裡
+              </p>
+              <p className="text-[17px] text-faint">
+                effort {effort} 這次會產生 {workload} 個百分點的量
+              </p>
+            </div>
+
+            <ContextRow
+              label="主 Session"
+              pct={mainPct}
+              note={mainNote}
+              tone={mainTone}
+            />
+            <ContextRow
+              label={otherLabel}
+              pct={otherPct}
+              note={otherNote}
+              tone={hasOther ? 'teal' : 'neutral'}
+            />
+          </div>
+
+          <div className={`rounded-2xl px-5 py-4 ${toneStyles[costTone].card}`}>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[19px] text-paper">
+                  這一次任務的成本（示意試算）
+                </p>
+                <p className="mt-0.5 text-[16px] text-paper">
+                  以 Sonnet ＋ medium ＋ 不開 SubAgent 為 1×
+                </p>
+              </div>
+              <p className="font-display text-[42px] leading-none text-paper">
+                {costTotal.toFixed(2)}
+                <span className="ml-1 font-sans text-[22px]">×</span>
+              </p>
+            </div>
+            <div className="mt-3 h-3.5 w-full overflow-hidden rounded-full bg-panel">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${toneStyles[costTone].bar}`}
+                style={{ width: `${costWidth}%` }}
+              />
+            </div>
+            <p className="mt-2 font-mono text-[17px] text-paper">
+              {costBreakdown}
+            </p>
+            <p className="mt-1.5 text-[17px] text-paper">
+              換不換 Session 不影響這個數字 —— 加預算的是 Model、Effort 與
+              SubAgent。
             </p>
           </div>
         </div>
       </div>
 
       <p className="text-[20px] text-muted">
-        Model 決定這一次任務的推理成本；Effort
-        同時牽動思考的深度與 Context 的消耗；Session 與 SubAgent
-        決定主 Session 要替你背多少 Context。
+        換 Session 或開 SubAgent 不是讓上下文消失，是換一個地方承接它；省的是主
+        Session 的額度，不是總花費 —— 真正加預算的是 Model、Effort 與 SubAgent。
       </p>
     </div>
   );

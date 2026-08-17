@@ -1,8 +1,10 @@
 import type { Step } from '../../types/slide';
 import {
+  MultiProjectDemo,
   WhySplitDemo,
   CrossProjectDemo,
   OpenApiBridgeDemo,
+  PostmanDemo,
 } from './demos-project';
 import { EslintDemo, AiRulesDemo } from './demos-rules';
 import {
@@ -97,6 +99,18 @@ export const steps: Step[] = [
   },
 
   {
+    id: 'multi-project',
+    title: '多專案的情境',
+    description:
+      '正常開發到什麼程度，手上才會同時有多個專案？先看看專案實際長什麼樣子，再談怎麼餵給 AI。',
+    body: {
+      kind: 'demo',
+      render: MultiProjectDemo,
+      caption: '小型專案不需要拆；模組與團隊長大之後才依需求拆分',
+    },
+  },
+
+  {
     id: 'why-split',
     title: '為什麼要拆專案',
     description: '切換兩種做法，看 AI 實際要讀幾個檔案、Context 佔用差多少。',
@@ -128,6 +142,19 @@ export const steps: Step[] = [
       kind: 'demo',
       render: OpenApiBridgeDemo,
       caption: 'openapi.json 是前後端之間唯一需要交換的檔案',
+    },
+  },
+
+  {
+    id: 'postman-ui',
+    title: 'Postman 介面',
+    description:
+      '同一份 openapi.json，AI 讀的是那份 json，開發者看到的則是這個介面。',
+    body: {
+      kind: 'demo',
+      render: PostmanDemo,
+      caption:
+        'openapi.json 用 openapi-to-postmanv2 轉出來的 Collection，點一下就能打 API',
     },
   },
 
@@ -203,8 +230,49 @@ export const steps: Step[] = [
       kicker: 'Chapter 02',
       heading: '程式碼規範與測試',
       lead: [
-        'ESLint 管得住格式，管不住 AI 的判斷。規範要分兩層寫。',
-        '測試則要挑對種類：四種測試各自守一段範圍，選錯就白測。',
+        '隨著專案規模成長，程式碼品質往往會偏離最初設定的水準，執行時也可能出現不如預期的狀況。',
+        '為了不讓問題累積到後期才處理，我們會在開發過程中先建立規範，並導入測試機制，讓錯誤能及早被發現。',
+      ],
+    },
+  },
+
+  {
+    id: 'ch-quality-goals',
+    title: '第二章上 · 會學到',
+    body: {
+      kind: 'points',
+      heading: '第二章上 · 你會學到',
+      items: [
+        {
+          text: '把規範拆成兩層寫下來',
+          note: '你會逐條勾選 AGENTS.md，看同一個任務的產出從造假的綠燈變成如實回報。',
+          accent: 'blue',
+        },
+        {
+          text: '在跑測試之前先用靜態檢查擋一輪',
+          note: '型別、build 與 ESLint／Prettier 三道關卡，各自攔得下什麼樣的錯。',
+          accent: 'blue',
+        },
+        {
+          text: '看清楚沒有測試時，一次偏差會滾多遠',
+          note: '第 3 步弄壞的既有行為要到第 10 步才被發現，回溯成本一路累加。',
+          accent: 'blue',
+        },
+        {
+          text: '走過四種測試各自的守備範圍',
+          note: 'Unit、Integration、Contract、E2E 都有可以動手玩的示範，看它們各自抓得到什麼。',
+          accent: 'blue',
+        },
+        {
+          text: '學會判斷手上這段程式碼該補哪一種',
+          note: '判斷的起點不是覆蓋率，是它壞掉的時候你最想先知道什麼。',
+          accent: 'blue',
+        },
+        {
+          text: '用七題情境考題檢查自己的判斷',
+          note: '四題單選、三題複選，複選那三題會告訴你答案常常不只一個。',
+          accent: 'blue',
+        },
       ],
     },
   },
@@ -248,7 +316,8 @@ export const steps: Step[] = [
   {
     id: 'why-test',
     title: '為什麼要測試',
-    description: '把「加入測試」開關打開，看第 3 步的錯誤會停在哪裡。',
+    description:
+      '第 3 步加了一個新功能，它悄悄弄壞了既有行為。把「加入測試」打開，看它會停在哪裡。',
     body: {
       kind: 'demo',
       render: WhyTestDemo,
@@ -359,30 +428,40 @@ export const steps: Step[] = [
     description: '先問這段程式碼壞掉會怎樣，再決定要補哪一種測試。',
     body: {
       kind: 'table',
-      columns: ['判斷情境', '建議測試', '範例'],
+      columns: ['測試類型', '什麼時候要用', '測的是什麼', '這門課的具體案例'],
       rows: [
         [
+          { text: 'Unit Test', accent: 'acid' },
           '高風險商業邏輯',
-          'Unit Test',
+          '單一函式的邏輯運算',
           '九折、折抵上限與最低消費金額是否計算正確',
         ],
         [
+          { text: 'Integration Test', accent: 'teal' },
           '容易斷掉的模組串接',
-          'Integration Test',
-          '資料庫讀寫、登入流程、訂單與庫存更新、通知與背景任務能否正確合作',
+          '多個模組串起來後的協作與資料流',
+          {
+            note: 'codex/admin-orders-auth-bug',
+            text: '管理員訂單 API 是否真的擋掉一般會員',
+          },
         ],
         [
+          { text: 'API／Contract Test', accent: 'blue' },
           '跨系統依賴',
-          'API／Contract Test',
-          '前後端專案的 API 欄位、型別、狀態碼與錯誤格式是否符合約定',
+          '系統之間的欄位、型別、狀態碼與錯誤格式',
+          '前端拿到的 price 是 number 還是被改成字串',
         ],
         [
+          { text: 'E2E Test', accent: 'violet' },
           '核心商業流程',
-          'E2E Test',
-          '顧客輸入優惠券後，是否能以正確金額完成付款',
+          '使用者從頭到尾走完一次的真實流程',
+          {
+            note: 'codex/e2e-checkout',
+            text: '顧客輸入優惠券後，能不能以正確金額完成付款',
+          },
         ],
       ],
-      note: '同一段功能常常需要兩種以上的測試，差別在於哪一種先寫。',
+      note: '同一段功能常常需要兩種以上的測試，先寫哪一種取決於它壞掉的時候你最想先知道什麼。',
     },
   },
 
@@ -408,6 +487,47 @@ export const steps: Step[] = [
     },
   },
 
+  {
+    id: 'ch-quality-recap',
+    title: '第二章上 · 重點',
+    body: {
+      kind: 'points',
+      heading: '這一段的重點',
+      items: [
+        {
+          text: '規範要分兩層寫，缺一層就會漏',
+          note: 'ESLint 擋的是寫出來的程式碼，AGENTS.md 擋的是 AI 產出的方式。',
+          accent: 'acid',
+        },
+        {
+          text: '靜態檢查是最便宜的一關',
+          note: '型別錯、跑不起來、風格不一致，在寫測試之前就能先解決掉。',
+          accent: 'acid',
+        },
+        {
+          text: '測試的價值是把偏差留在發生的那一步',
+          note: '它不保證新功能不出錯，而是讓出錯停在第 3 步，不是第 10 步。',
+          accent: 'acid',
+        },
+        {
+          text: '四種測試不是四選一',
+          note: '三支單元測試全綠，串起來照樣漏掉權限 —— 各層驗得到的東西不一樣。',
+          accent: 'acid',
+        },
+        {
+          text: '選測試先問「壞掉時最想先知道什麼」',
+          note: '高風險邏輯先補 Unit、跨系統依賴先補 Contract、核心流程才動用 E2E。',
+          accent: 'acid',
+        },
+        {
+          text: '同一個情境常常需要兩種以上的測試',
+          note: '複選題的重點不是選對名詞，是說得出每一種各自守住什麼。',
+          accent: 'acid',
+        },
+      ],
+    },
+  },
+
   /* ── 二（下半）、AI 協作時的測試問題 ───────────────────── */
 
   {
@@ -419,6 +539,47 @@ export const steps: Step[] = [
       heading: 'AI 協作時的測試問題',
       lead: [
         '測試本身沒有錯，錯的是它在產生、執行與修正三個階段各自失控的方式。',
+      ],
+    },
+  },
+
+  {
+    id: 'ch-ai-risk-goals',
+    title: '第二章下 · 會學到',
+    body: {
+      kind: 'points',
+      heading: '第二章下 · 你會學到',
+      items: [
+        {
+          text: '親手刪掉一批說不出價值的測試',
+          note: '28 個刪到剩 6 個，你會看到覆蓋率掉了，抓到的 bug 數卻沒有跟著少。',
+          accent: 'blue',
+        },
+        {
+          text: '量一次執行階段的代價落在哪裡',
+          note: '範圍、輸出與穩定度的代價都記在 Context 上：60% 的用量可以壓回 8%。',
+          accent: 'blue',
+        },
+        {
+          text: '認出修正階段的兩個陷阱',
+          note: '改測試換來的綠燈，以及沒有上限的修正迴圈，都會讓問題留在原地。',
+          accent: 'blue',
+        },
+        {
+          text: '學會寫出說得出價值的測試',
+          note: '優先測商業規則、邊界與曾發生的 Bug；說不出價值的就不加。',
+          accent: 'blue',
+        },
+        {
+          text: '把測試切成模組來跑',
+          note: '一次全跑 4m32s、1,842 行；只跑改到的 coupon 是 11s、34 行。',
+          accent: 'blue',
+        },
+        {
+          text: '替上下文換一個地方承接，必要時自己跑',
+          note: 'Session／Model／Effort／SubAgent 各有代價，人工跑一次再貼關鍵錯誤往往更省。',
+          accent: 'blue',
+        },
       ],
     },
   },
@@ -565,6 +726,47 @@ export const steps: Step[] = [
       kind: 'demo',
       render: ManualTerminalDemo,
       caption: '在終端機自己跑一次 npm run test:module -- coupon，是最快確認狀態的方法',
+    },
+  },
+
+  {
+    id: 'ch-ai-risk-recap',
+    title: '第二章下 · 重點',
+    body: {
+      kind: 'points',
+      heading: '這一段的重點',
+      items: [
+        {
+          text: '測試不是越多越好',
+          note: '刪掉 22 個說不出價值的之後，覆蓋率掉了 7%，抓到的真實 bug 一個都沒少。',
+          accent: 'acid',
+        },
+        {
+          text: '綠燈不等於正確',
+          note: '斷言被刪掉之後畫面照樣全綠，算錯的金額原封不動送出去。',
+          accent: 'acid',
+        },
+        {
+          text: 'Context 是有限資源，測試 log 消耗最快',
+          note: '額度被 log 佔滿時，最先被壓縮掉的是你一開始交代的那些規則。',
+          accent: 'acid',
+        },
+        {
+          text: '一定要先給停止條件',
+          note: '同一問題最多修三次、之後交回人工，才收得住次數、token 與改動範圍。',
+          accent: 'acid',
+        },
+        {
+          text: '只跑跟這次修改相關的測試',
+          note: '從 4m32s／1,842 行變成 11s／34 行，省下的同時是時間與 Context。',
+          accent: 'acid',
+        },
+        {
+          text: '換 Session 或開 SubAgent 不是讓上下文消失',
+          note: '是換一個地方承接它 —— 省的是主 Session 的額度，不是總花費。',
+          accent: 'acid',
+        },
+      ],
     },
   },
 

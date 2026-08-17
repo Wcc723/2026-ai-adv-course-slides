@@ -301,25 +301,93 @@ export function EslintDemo() {
  * ──────────────────────────────────────────────────────────── */
 
 type RuleId =
-  | 'keep-assertions'
-  | 'scope-tests'
-  | 'minimal-diff'
-  | 'stop-after-three';
+  'keep-assertions' | 'scope-tests' | 'minimal-diff' | 'stop-after-three';
 
-interface AgentRule {
-  id: RuleId;
-  text: string;
-}
+/**
+ * 左欄放的是「一整份 AGENTS.md」而不是四個被抽出來的選項 ——
+ * 學員要看到的是真的專案裡會放的檔案長什麼樣子，所以連驗證指令、
+ * 產生檔、金鑰、回報格式這些不可點的條目都寫進去。
+ *
+ * ⚠ 這一頁的文件容器是全 deck 唯一允許內部捲動的地方（卡斯伯指定）：
+ *   文件本來就比容器高，捲動本身就是「這是一份完整檔案」的訊息。
+ *   其餘元件仍然不准靠捲軸塞內容。
+ *
+ * kind: 'rule' 的四行是開關，驅動右欄的產出；其餘一律不可點。
+ */
+type DocLine =
+  | { kind: 'h1'; text: string }
+  | { kind: 'h2'; text: string }
+  | { kind: 'bullet'; text: string }
+  | { kind: 'rule'; id: RuleId; text: string }
+  | { kind: 'blank' };
 
-const agentRules: readonly AgentRule[] = [
+const agentsDoc: readonly DocLine[] = [
+  { kind: 'h1', text: 'AGENTS.md' },
+  { kind: 'blank' },
+
+  { kind: 'h2', text: '專案結構' },
   {
-    id: 'keep-assertions',
-    text: '不要為了讓測試通過而刪除斷言、放寬條件或更新 Snapshot',
+    kind: 'bullet',
+    text: '前端 apps/web、後端 apps/api，共用型別放 packages/shared。',
   },
-  { id: 'scope-tests', text: '先跑相關測試，通過再跑完整測試' },
-  { id: 'minimal-diff', text: '修改範圍保持最小，不做無關的重構' },
-  { id: 'stop-after-three', text: '同一問題最多修三次，之後交回人工確認' },
+  {
+    kind: 'bullet',
+    text: '前後端的欄位與型別以 openapi.json 為準，不要各自猜。',
+  },
+  { kind: 'blank' },
+
+  { kind: 'h2', text: '驗證方式' },
+  { kind: 'bullet', text: '修改 apps/web/ 後執行 pnpm --filter web test。' },
+  { kind: 'bullet', text: '修改 apps/api/ 後執行 pnpm --filter api test。' },
+  { kind: 'bullet', text: '契約或 Schema 異動後執行 pnpm contract:check。' },
+  { kind: 'rule', id: 'scope-tests', text: '先跑相關測試，通過再跑完整測試。' },
+  {
+    kind: 'bullet',
+    text: '送出前執行 pnpm lint 與 pnpm typecheck，兩個都要過。',
+  },
+  { kind: 'blank' },
+
+  { kind: 'h2', text: '限制' },
+  {
+    kind: 'bullet',
+    text: '不要直接修改自動產生的檔案（openapi.d.ts、*.gen.ts），改來源定義後重新產生。',
+  },
+  {
+    kind: 'rule',
+    id: 'keep-assertions',
+    text: '不要為了讓測試通過而刪除斷言、放寬條件或更新 Snapshot。',
+  },
+  { kind: 'bullet', text: '新增正式環境相依套件前先說明原因。' },
+  {
+    kind: 'rule',
+    id: 'minimal-diff',
+    text: '修改範圍保持最小，不做無關的重構。',
+  },
+  {
+    kind: 'bullet',
+    text: '不要提交 .env 或任何金鑰，範例值寫進 .env.example。',
+  },
+  { kind: 'blank' },
+
+  { kind: 'h2', text: '停止條件' },
+  {
+    kind: 'rule',
+    id: 'stop-after-three',
+    text: '同一問題最多修三次，之後交回人工確認。',
+  },
+  { kind: 'bullet', text: '要刪掉既有測試才能通過時，先停下來說明理由。' },
+  { kind: 'bullet', text: '找不到規格或契約時不要自行假設，直接問。' },
+  { kind: 'blank' },
+
+  { kind: 'h2', text: '回報格式' },
+  {
+    kind: 'bullet',
+    text: '先寫改了什麼，再寫怎麼驗證，最後寫還沒處理的部分。',
+  },
+  { kind: 'bullet', text: '測試沒過就直接說沒過，不要只回報通過的項目。' },
 ];
+
+const ruleCount = agentsDoc.filter((line) => line.kind === 'rule').length;
 
 const initialChecked: Record<RuleId, boolean> = {
   'keep-assertions': false,
@@ -330,7 +398,7 @@ const initialChecked: Record<RuleId, boolean> = {
 
 function CheckMark() {
   return (
-    <svg viewBox="0 0 20 20" className="size-[16px]" aria-hidden="true">
+    <svg viewBox="0 0 20 20" className="size-[14px]" aria-hidden="true">
       <path
         d="M4 10.6 8.2 14.6 16 5.4"
         fill="none"
@@ -350,6 +418,7 @@ export function AiRulesDemo() {
   const toggle = (id: RuleId) =>
     setChecked((current) => ({ ...current, [id]: !current[id] }));
 
+  const checkedCount = Object.values(checked).filter(Boolean).length;
   const honest = checked['keep-assertions'];
   const bounded = checked['stop-after-three'];
 
@@ -380,48 +449,99 @@ export function AiRulesDemo() {
 
   return (
     <div className="flex w-full max-w-[1680px] flex-col gap-5">
-      <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,6fr)] items-start gap-6">
-        {/* ── 左：AGENTS.md ───────────────────────────── */}
+      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-6">
+        {/* ── 左：AGENTS.md 全文（唯一允許捲動的容器）──── */}
         <section>
-          <div className="mb-3 flex items-baseline gap-3">
-            <h4 className="font-mono text-[20px] text-paper">AGENTS.md</h4>
-            <span className="text-[17px] text-faint">
-              勾選要交給 AI 遵守的規則
-            </span>
-          </div>
+          <p className="mb-3 text-[17px] leading-[1.5] text-faint">
+            有核取方塊的 {ruleCount} 行可以點，勾選代表這條規則有寫進
+            AGENTS.md；文件比框高，往下捲可以看完整份。
+          </p>
 
-          <div className="flex flex-col gap-3">
-            {agentRules.map((rule) => {
-              const on = checked[rule.id];
-              return (
-                <button
-                  key={rule.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggle(rule.id)}
-                  className={`flex items-center gap-4 rounded-xl border border-l-[6px] px-5 py-4 text-left transition-colors ${
-                    on
-                      ? 'border-acid/55 border-l-acid bg-acid/14 hover:border-acid hover:border-l-acid'
-                      : 'border-line-soft border-l-line-soft bg-panel-lift hover:border-line hover:border-l-line'
-                  }`}
-                >
-                  <span
-                    className={`grid size-[30px] shrink-0 place-items-center rounded-md border ${
-                      on ? 'border-acid bg-acid' : 'border-line bg-panel'
-                    }`}
+          <div className="overflow-hidden rounded-xl border border-line">
+            <div className="flex items-center justify-between border-b border-line bg-panel-lift px-5 py-2.5">
+              <span className="font-mono text-[18px] text-paper">
+                AGENTS.md
+              </span>
+              <span className="rounded-full border border-line px-3.5 py-1 font-mono text-[16px] text-muted">
+                {checkedCount} / {ruleCount} 條已勾選
+              </span>
+            </div>
+
+            {/* ⚠ 全 deck 唯一的內部捲軸：h 固定、內容約兩倍高，捲動是刻意的 */}
+            <div className="h-[400px] overflow-y-auto bg-ink-soft px-4 py-4">
+              {agentsDoc.map((line, index) => {
+                const key = `${line.kind}-${index}`;
+
+                if (line.kind === 'blank') {
+                  return <div key={key} className="h-[12px]" />;
+                }
+
+                if (line.kind === 'h1') {
+                  return (
+                    <p
+                      key={key}
+                      className="px-2 font-mono text-[20px] leading-[1.7] text-paper"
+                    >
+                      <span className="text-faint">#</span> {line.text}
+                    </p>
+                  );
+                }
+
+                if (line.kind === 'h2') {
+                  return (
+                    <p
+                      key={key}
+                      className="px-2 font-mono text-[18px] leading-[1.7] text-paper"
+                    >
+                      <span className="text-faint">##</span> {line.text}
+                    </p>
+                  );
+                }
+
+                if (line.kind === 'bullet') {
+                  return (
+                    <div key={key} className="flex items-start gap-2 px-2">
+                      <span className="w-[20px] shrink-0 font-mono text-[17px] leading-[1.7] text-faint">
+                        -
+                      </span>
+                      <span className="font-mono text-[17px] leading-[1.7] text-muted">
+                        {line.text}
+                      </span>
+                    </div>
+                  );
+                }
+
+                const on = checked[line.id];
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => toggle(line.id)}
+                    className="flex w-full items-start gap-2 rounded-md px-2 text-left transition-colors hover:bg-panel"
                   >
-                    {on && <CheckMark />}
-                  </span>
-                  <span
-                    className={`text-[22px] leading-[1.5] ${
-                      on ? 'text-paper' : 'text-muted'
-                    }`}
-                  >
-                    {rule.text}
-                  </span>
-                </button>
-              );
-            })}
+                    {/* 勾／空框是不靠顏色的第一個訊號 */}
+                    <span
+                      className={`mt-[5px] grid size-[20px] shrink-0 place-items-center rounded-[5px] border ${
+                        on ? 'border-acid bg-acid' : 'border-line bg-panel'
+                      }`}
+                    >
+                      {on && <CheckMark />}
+                    </span>
+                    {/* 刪除線是第二個訊號：沒勾＝這條沒寫進去 */}
+                    <span
+                      className={`font-mono text-[17px] leading-[1.7] ${
+                        on
+                          ? 'text-paper'
+                          : 'text-faint line-through decoration-2'
+                      }`}
+                    >
+                      {line.text}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </section>
 
