@@ -1,5 +1,5 @@
 {
-  "name": "course-presentation-builder",
+  "name": "2026-ai-adv-course-slides",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy:pages": "node scripts/guard-deploy.mjs && pnpm build && gh-pages -d dist",
+    "deploy:pages": "node scripts/guard-deploy.mjs && VITE_BASE=/2026-ai-adv-course-slides/ pnpm build && gh-pages -d dist",
     "deploy": "pnpm run deploy:pages"
   },
   "dependencies": {
