@@ -95,10 +95,12 @@ One codebase, two faces, switched by `VITE_DECK_MODE`. The only place that reads
 | Watermark | hidden | 六角學院 mark in a corner of every slide |
 | Set by | `pnpm dev` (`.env.development`) | everything else (`.env`) |
 
-**`internalCourses` 目前是空的，機制保留著。** 版型示範原本放在那裡，後來改成公開：
-它只是版型與色票的參考標準，沒有不能給人看的內容；而且擺在內部版有個實際的壞處 ——
-浮水印只在對外版渲染，內部版永遠看不到，等於這個 repo 沒有任何一頁能驗證浮水印會不會壓到內容。
-改成公開之後才量得到（結果見 `Watermark.tsx` 的註解）。舊的課程簡報保留在原專案
+**`internalCourses` 目前放著〈簡報版型示範〉。** 它是給講師與開發者看的版型、色票參考標準，
+對學員來說是雜訊，所以對外的課程網站不列出、也不打包進去；`pnpm dev` 照樣看得到。
+
+它中間曾經改成公開過一段時間，理由是浮水印只在對外版渲染，當時 repo 裡除了它沒有別的 deck，
+不公開就沒有任何一頁能驗證浮水印會不會壓到內容（量測結果見 `Watermark.tsx` 的註解）。
+第三堂課的簡報進來之後這個理由就不成立了，才移回內部版。舊的課程簡報保留在原專案
 `2026-interactive-presentive`。
 
 `import.meta.env.VITE_DECK_MODE` is a build-time constant, so the public bundle never contains
@@ -129,6 +131,8 @@ The three that bite silently:
   looks fine locally and collides only in the deployed build. 唯一看得到浮水印的是
   `pnpm dev:public`（或 `pnpm preview`）。右上角是量過的（〈版型示範〉10 頁 0 衝突，
   其餘三角都撞），但新簡報不會自動安全，把內容推到右上的版面要重新確認。
+  注意〈版型示範〉已移回內部版，`pnpm dev:public` 看不到它 —— 現在能拿來對浮水印
+  的是〈AI 測試實戰〉那 44 頁。
 - **Importing from an internal deck drags it back into the public bundle.** The removal relies
   on nothing referencing those modules; one `import` from `src/showcase/` in shared or public
   code defeats it, and the build stays green. Copy the code instead.
@@ -161,7 +165,8 @@ src/
 ├── assets/manifest.ts       # Typed asset catalogue (AssetId union)
 ├── assets/svg/*.svg         # Asset files, filename === id
 ├── data/courses.ts          # Home page + menu listing
-└── showcase/版型示範/        # Reference deck (10 pages) — the only deck here; copy it to start a course
+├── class3/AI 測試實戰/       # 第三堂課（44 頁）— the only public deck
+└── showcase/版型示範/        # Reference deck (10 pages), internal-only; copy it to start a course
 ```
 
 Each deck is four files: `slides.ts` (data), `demos.tsx` (interactive), `diagrams.tsx` (SVG), `index.tsx` (entry).

@@ -12,11 +12,14 @@ export interface Course {
 }
 
 /**
- * 只在內部版出現的簡報。**目前是空的**，機制本身完整保留著。
+ * 只在內部版出現的簡報。
  *
- * 版型示範原本放在這裡，後來改成公開：它只是版型與色票的參考標準，沒有不能給人
- * 看的內容；而且擺在內部版有個實際的壞處 —— 浮水印只在對外版渲染，內部版永遠
- * 看不到，等於這個 repo 沒有任何一頁能驗證浮水印會不會壓到內容。
+ * 版型示範放在這裡：它是給講師與開發者看的版型、色票參考標準，對學員來說是雜訊，
+ * 所以對外的課程網站不列出、也不打包進去。`pnpm dev` 是內部版，開發時照樣看得到。
+ *
+ * 它曾經改成公開過，理由是「浮水印只在對外版渲染，內部版永遠看不到，等於這個 repo
+ * 沒有任何一頁能驗證浮水印會不會壓到內容」。那個理由現在不成立了 —— 第三堂課的簡報
+ * 是公開的，`pnpm dev:public` 有 44 頁可以量浮水印，不必再拿這一份頂著。
  *
  * 要放不公開的簡報時：往這個陣列加一筆，同時在 `src/router.tsx` 的
  * `internalOnlyRoutes` 加對應路由。`isInternal` 是 build 時就被換成字面值的常數
@@ -27,7 +30,12 @@ export interface Course {
  */
 const internalCourses: Course[] = isInternal
   ? [
-      // 範例：{ id: 'draft', title: '課程草稿', path: '/internal/draft' }
+      {
+        id: 'layout-showcase',
+        title: '簡報版型示範',
+        path: '/showcase/layouts',
+        description: '版型、色票與素材庫的參考標準，開新課程請從這份複製',
+      },
     ]
   : [];
 
@@ -39,12 +47,6 @@ const internalCourses: Course[] = isInternal
  * Week N，有 `series` 的會自動歸到該系列，兩者都沒有的會被當成參考範本。
  */
 const publicCourses: Course[] = [
-  {
-    id: 'layout-showcase',
-    title: '簡報版型示範',
-    path: '/showcase/layouts',
-    description: '版型、色票與素材庫的參考標準，開新課程請從這份複製',
-  },
   {
     id: 'ai-testing',
     title: 'AI 測試實戰－從自動測試到跨專案整合',

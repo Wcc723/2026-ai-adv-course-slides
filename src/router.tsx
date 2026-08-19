@@ -6,7 +6,7 @@ import { AiTestingSlide } from './class3/AI 測試實戰';
 
 /**
  * 只在內部版掛載的路由，對應 `src/data/courses.ts` 的 `internalCourses`。
- * **目前是空的**，機制本身完整保留著（理由與用法見 `courses.ts` 的註解）。
+ * 版型示範掛在這裡（理由見 `courses.ts` 的註解）。
  *
  * `isInternal` 是 build 時就被換成字面值的常數（見 `src/env.ts`），所以對外版產物裡
  * 這個三元運算式會被靜態求值成 `[]`，元件連同它的 demos、diagrams
@@ -20,7 +20,10 @@ import { AiTestingSlide } from './class3/AI 測試實戰';
  */
 const internalOnlyRoutes: RouteObject[] = isInternal
   ? [
-      // 範例：{ path: '/internal/draft', element: <DraftSlide /> }
+      {
+        path: '/showcase/layouts',
+        element: <LayoutShowcaseSlide />,
+      },
     ]
   : [];
 
@@ -30,10 +33,6 @@ export const router = createHashRouter([
     element: <Home />,
   },
   ...internalOnlyRoutes,
-  {
-    path: '/showcase/layouts',
-    element: <LayoutShowcaseSlide />,
-  },
   {
     path: '/class3/ai-testing',
     element: <AiTestingSlide />,
