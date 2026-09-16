@@ -269,7 +269,7 @@ const openApiSpec: CourseExampleSpec = {
   ],
   extraDoc: {
     label: 'OpenAPI 與跨專案協作的補充說明',
-    href: 'https://app.notion.com/p/3bd6ab47eb4880188035f97eec89ced6?source=copy_link#3bd6ab47eb4880298dc6c03f78260e96',
+    href: 'https://liberating-turtle-5a2.notion.site/OpenAPI-Postman-3816a24685188028b933e3d8f36142b8?source=copy_link',
   },
 };
 
