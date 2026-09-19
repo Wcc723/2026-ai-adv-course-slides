@@ -3,6 +3,7 @@ import { isInternal } from './env';
 import { Home } from './pages/Home';
 import { LayoutShowcaseSlide } from './showcase/版型示範';
 import { AiTestingSlide } from './class3/AI 測試實戰';
+import { WebsiteZeroToOneSlide } from './website-0-to-1/從 0 到 1 的網站開發';
 
 /**
  * 只在內部版掛載的路由，對應 `src/data/courses.ts` 的 `internalCourses`。
@@ -36,6 +37,10 @@ export const router = createHashRouter([
   {
     path: '/class3/ai-testing',
     element: <AiTestingSlide />,
+  },
+  {
+    path: '/website-0-to-1',
+    element: <WebsiteZeroToOneSlide />,
   },
   /*
    * 認不得的網址一律回首頁。沒有這一條的話，react-router 會直接把它內建的

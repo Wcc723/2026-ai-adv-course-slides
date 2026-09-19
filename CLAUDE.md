@@ -165,7 +165,8 @@ src/
 ├── assets/manifest.ts       # Typed asset catalogue (AssetId union)
 ├── assets/svg/*.svg         # Asset files, filename === id
 ├── data/courses.ts          # Home page + menu listing
-├── class3/AI 測試實戰/       # 第三堂課（44 頁）— the only public deck
+├── class3/AI 測試實戰/       # 第三堂課（44 頁）— public
+├── website-0-to-1/從 0 到 1 的網站開發/  # 獨立課程（36 頁）— public；部分頁面移植自 2026-interactive-presentive（深→亮轉換過）
 └── showcase/版型示範/        # Reference deck (10 pages), internal-only; copy it to start a course
 ```
 

@@ -55,6 +55,14 @@ const publicCourses: Course[] = [
       '跨專案管理、程式碼規範與四種測試，以及把測試交給 GitHub Actions',
     series: '第三堂課',
   },
+  {
+    id: 'website-0-to-1',
+    title: '從 0 到 1 的網站開發',
+    path: '/website-0-to-1',
+    description:
+      '用 Codex 做出第一個網站、部署到 ChatGPT Sites，再串接 Google 試算表做家庭記帳工具',
+    series: '獨立課程',
+  },
 ];
 
 /** 首頁與課程選單看到的清單。對外版就是 `publicCourses` 本身 */
