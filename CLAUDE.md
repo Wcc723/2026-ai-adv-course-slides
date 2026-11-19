@@ -166,7 +166,9 @@ src/
 ├── assets/svg/*.svg         # Asset files, filename === id
 ├── data/courses.ts          # Home page + menu listing
 ├── class3/AI 測試實戰/       # 第三堂課（44 頁）— public
-├── website-0-to-1/從 0 到 1 的網站開發/  # 獨立課程（36 頁）— public；部分頁面移植自 2026-interactive-presentive（深→亮轉換過）
+├── class4/AI 協作進階/       # 第四堂課（44 頁，六章；第六章是「近期的分享」，2026-10-13 換掉原本的外部服務整合與重點回顧，舊檔在 _backup/）— public；部分頁面複製自〈5 種 SubAgent 協作模式〉與 2026-interactive-presentive
+├── class5/AI 桌面助理開發實戰/  # 第五堂課（47 頁，ChatGPT vs Claude 桌面版，加一個 Google Antigravity 小章節與 Gemini 比較表（demos-gemini-compare.tsx，講師體感評分）；開場的「卡斯伯目前訂閱」後面接訂閱調查頁（demos-subscription-poll.tsx，複選＋單選，投票主題 sub-*，不進排行）；介面四頁（ChatGPT Chat／Work／Codex、Claude 對話＋Code，手繪介面示意，左上角有 ChatGPT／Claude 品牌貼紙，brand-badge.tsx）放在共有的能力前面；ChatGPT 章節的 Sites 後面有 Mini 寵物（智慧精靈，demos-mini-pet.tsx）；另有專案差異頁（demos-projects-compare.tsx）；Environments 三頁：「選 Claude 在哪裡開發」（本機／雲端／遠端三種開發模式的概念圖＋各自可以做什麼，SSH 只提用途不示範）＋ Local 與 Cloud 的實作頁（2026-11-19；「環境變數能套用到專案嗎？」那頁已移除），搭配 第五堂/Claude/env-switch-demo 範例＋「可以用在哪些情境」（demos-environments-scenarios.tsx，本機／雲端／排程自動化／遠端四欄九個查證過的情境，講師的三個用途標「講師常用」，點卡片看出處）；最後一章「開發屬於自己的工具」＝章節頁＋社群自製工具頁（demos-community-tools.tsx）＋CODD＋實戰，GitHub Project 提示詞頁（demos-practice-prompt.tsx）可分階段複製；「ChatGPT 系列與混合使用」已移除）— public；內容依 Notion「課綱 › ChatGPT vs Claude」＋講師 CODD 筆記「簡報調整」（2026-11-10）、2026-11-17 的修改要求與 2026-11-18 的 CODD 筆記「簡報調整」（codd://note/note-plus）；功能頁底部、第 2 頁與第 6 頁有 Cloudflare WebSocket 投票（vote-*.ts，伺服器在 workers/class5-vote/，主題白名單改過要重新部署），第 47 頁投票結果最下方可連回第 2 頁
+├── website-0-to-1/從 0 到 1 的網站開發/  # 獨立課程（41 頁，36–40 是加碼內容）— public；部分頁面移植自 2026-interactive-presentive（深→亮轉換過）
 └── showcase/版型示範/        # Reference deck (10 pages), internal-only; copy it to start a course
 ```
 

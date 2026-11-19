@@ -3,7 +3,10 @@ import { isInternal } from './env';
 import { Home } from './pages/Home';
 import { LayoutShowcaseSlide } from './showcase/版型示範';
 import { AiTestingSlide } from './class3/AI 測試實戰';
+import { AiCollaborationSlide } from './class4/AI 協作進階';
+import { AiDesktopAssistantSlide } from './class5/AI 桌面助理開發實戰';
 import { WebsiteZeroToOneSlide } from './website-0-to-1/從 0 到 1 的網站開發';
+import { SubAgentPatternsSlide } from './subagent/5 種 SubAgent 協作模式';
 
 /**
  * 只在內部版掛載的路由，對應 `src/data/courses.ts` 的 `internalCourses`。
@@ -39,8 +42,20 @@ export const router = createHashRouter([
     element: <AiTestingSlide />,
   },
   {
+    path: '/class4/ai-collaboration',
+    element: <AiCollaborationSlide />,
+  },
+  {
+    path: '/class5/ai-desktop-assistant',
+    element: <AiDesktopAssistantSlide />,
+  },
+  {
     path: '/website-0-to-1',
     element: <WebsiteZeroToOneSlide />,
+  },
+  {
+    path: '/subagent-patterns',
+    element: <SubAgentPatternsSlide />,
   },
   /*
    * 認不得的網址一律回首頁。沒有這一條的話，react-router 會直接把它內建的

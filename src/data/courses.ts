@@ -56,11 +56,35 @@ const publicCourses: Course[] = [
     series: '第三堂課',
   },
   {
+    id: 'ai-collaboration',
+    title: 'AI 協作進階－SubAgents 與外部服務整合',
+    path: '/class4/ai-collaboration',
+    description:
+      'SubAgent 的概念與分類、跟 Skill／MCP 的搭配，以及 Ultracode 與 Loop Engineering',
+    series: '第四堂課',
+  },
+  {
+    id: 'ai-desktop-assistant',
+    title: 'AI 桌面助理開發實戰－ChatGPT vs Claude',
+    path: '/class5/ai-desktop-assistant',
+    description:
+      'ChatGPT 與 Claude 桌面版的共有能力與獨特能力，從 Computer Use、Remote Control 到 Dot、Artifact，加上現場投票',
+    series: '第五堂課',
+  },
+  {
     id: 'website-0-to-1',
     title: '從 0 到 1 的網站開發',
     path: '/website-0-to-1',
     description:
       '用 Codex 做出第一個網站、部署到 ChatGPT Sites，再串接 Google 試算表做家庭記帳工具',
+    series: '獨立課程',
+  },
+  {
+    id: 'subagent-patterns',
+    title: '5 種 SubAgent 協作模式',
+    path: '/subagent-patterns',
+    description:
+      '從基礎 SubAgent、Ultra Code、Loop Engineering、Remote Agent 到 Hermes Agent',
     series: '獨立課程',
   },
 ];
