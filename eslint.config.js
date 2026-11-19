@@ -6,7 +6,14 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores([
+    'dist',
+    // workers/ 底下的 Cloudflare Worker：wrangler dev 的暫存 bundle 與
+    // `wrangler types` 產生的型別檔不是手寫的，不掃
+    'workers/**/.wrangler',
+    'workers/**/node_modules',
+    'workers/**/worker-configuration.d.ts',
+  ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

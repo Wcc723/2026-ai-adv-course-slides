@@ -1,0 +1,6 @@
+# wrangler dev 的本機狀態與暫存 bundle
+.wrangler/
+node_modules/
+.dev.vars*
+# `npx wrangler types` 產生的型別（約 600 KB），typecheck 前再產生
+worker-configuration.d.ts

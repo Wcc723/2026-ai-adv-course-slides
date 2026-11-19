@@ -1,0 +1,27 @@
+// 第五堂課〈AI 桌面助理開發實戰〉的現場投票伺服器。
+// 部署、換房間重置、本機測試的步驟見同資料夾的 README.md。
+{
+  "name": "class5-vote",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-10",
+
+  // 只用 workers.dev 網址，不開 Preview URL（投票不需要預覽版本）
+  "workers_dev": true,
+  "preview_urls": false,
+
+  // 一個房間（room）就是一個 Durable Object，以房間名稱命名（getByName）
+  "durable_objects": {
+    "bindings": [{ "name": "VOTE_ROOM", "class_name": "VoteRoom" }]
+  },
+
+  // SQLite-backed Durable Object。
+  // Cloudflare 現在也支援用 `exports` 宣告類別，但兩種寫法互斥，
+  // 而且一旦用 `exports` 部署過就不能改回 `migrations`；這裡維持 migrations。
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["VoteRoom"] }],
+
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.05 }
+  }
+}
