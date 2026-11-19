@@ -43,12 +43,16 @@ import {
   AdvancedPromptDemo,
   FamilyLedgerDemo,
 } from './demos-advanced';
+import { SkillDemo } from './demos-bonus';
+import { StorageDemo } from './demos-bonus-storage';
+import { SampleDemo } from './demos-bonus-sample';
+import { PromptGeneratorDemo } from './demos-bonus-prompt';
 
 export const slideTitle = '從 0 到 1 的網站開發';
 export const slideSubtitle = 'Codex · ChatGPT Sites · Google 試算表';
 
 /*
- * 三十六頁的節奏：
+ * 四十一頁的節奏：
  *   1–2    封面、今天的四個目標
  *   3–18   第一章 起手式：ChatGPT 桌面版的三種模式 → 輸入框那一排設定
  *          → 網站怎麼運作（伺服器、前端、圖片）
@@ -56,7 +60,9 @@ export const slideSubtitle = 'Codex · ChatGPT Sites · Google 試算表';
  *          → ChatGPT Sites 是什麼、要注意什麼
  *   27–35  第三章 串接 Google 試算表：為什麼 → 資料長相 → 開通服務 → 權限
  *          → 進階網站的概念與提示詞 → 部署前檢查 → 家庭記帳實作
- *   36     重點回顧
+ *   36–40  加碼內容：D1 與 R2（含風險）→ 新手向 Skill → 部署範例
+ *          → 提示詞產生器（demos-bonus*.tsx、diagrams-bonus.tsx）
+ *   41     重點回顧
  *
  * ──────────────────────────────────────────────────────────────
  * 內容來源
@@ -373,6 +379,42 @@ export const steps: Step[] = [
     id: 'family-ledger',
     title: '實作：家庭記帳工具',
     body: { kind: 'demo', render: FamilyLedgerDemo },
+  },
+
+  /* ── 加碼內容 ───────────────────────────────────────────── */
+
+  {
+    id: 'ch-bonus',
+    title: '加碼內容',
+    body: {
+      kind: 'title',
+      kicker: 'Bonus',
+      heading: '加碼：讓網站記得資料、收得下檔案',
+      lead: [
+        '第 25 頁提過 ChatGPT Sites 還附了資料庫（D1）與檔案儲存（R2），這堂課的網站沒有用到。',
+        '加碼這一段把它們打開：先認識兩者與風險，再用一份新手向的 Skill，從第一份提示詞開始做。',
+      ],
+    },
+  },
+  {
+    id: 'd1-r2',
+    title: 'D1 與 R2：資料庫與檔案上傳空間',
+    body: { kind: 'demo', render: StorageDemo },
+  },
+  {
+    id: 'bonus-skill',
+    title: '新手向 Skill：chatgpt-sites-d1-r2',
+    body: { kind: 'demo', render: SkillDemo },
+  },
+  {
+    id: 'bonus-sample',
+    title: '部署範例：Todo 手帳',
+    body: { kind: 'demo', render: SampleDemo },
+  },
+  {
+    id: 'bonus-prompt',
+    title: '提示詞產生器：開始用 Skill 之前',
+    body: { kind: 'demo', render: PromptGeneratorDemo },
   },
 
   /* ── 收尾 ───────────────────────────────────────────────── */
