@@ -5,7 +5,8 @@ import { useState, type KeyboardEvent, type MouseEvent } from 'react';
  *
  *   第 41 頁  CommunityToolsDemo  社群上的自製工具（沒有投票 → 720）
  *   前一頁是章節頁「開發屬於自己的工具」（第 40 頁，demos-intro.tsx 的 OwnToolsCover），
- *   後一頁是講師自己做的 CODD（第 42 頁，demos-claude.tsx 的 CoddDemo）。
+ *   後一頁是第 3 頁作業的靈感牆「作業靈感：可以替自己做哪些工具」（第 42 頁，demos-extension-apps.tsx 的 ExtensionAppsDemo），
+ *   再下一頁才是講師自己做的 CODD（第 43 頁，demos-claude.tsx 的 CoddDemo）。
  *
  * ──────────────────────────────────────────────────────────────
  * 內容來源
@@ -80,7 +81,7 @@ import { useState, type KeyboardEvent, type MouseEvent } from 'react';
  * 補的示意（不是官方原文，也不是講師原話）：
  * - 卡片上的一句話、類別的副標與細節，是照上面的文件濃縮的。
  * - 底部那行「共通點」是這頁要帶出的重點（照主控的安排），呼應第 3 頁的作業挑戰
- *   「替自己的開發做一個工具」；「講師把 01、02、03 做進同一個工具」對照第 42 頁 CODD 的
+ *   「替自己的開發做一個工具」；「講師把 01、02、03 做進同一個工具」對照第 43 頁 CODD 的
  *   五項特色（Session、專案管理／Claude 用量剩餘／Claude 快速切換帳號）。
  * - 卡片的 ★ 是四捨五入到千位的 star 數（例：23.2k），細節寫到百位並附查詢日。
  *
@@ -736,7 +737,7 @@ export function CommunityToolsDemo() {
         <Detail pick={pick} />
       </div>
 
-      {/* ── 共通點 → 下一頁 CODD ──────────────────────────── */}
+      {/* ── 共通點 → 第 43 頁 CODD（2026-11-20 中間多了第 42 頁作業靈感，不再是下一頁） ── */}
       <div className="mt-4 flex h-14 shrink-0 items-center gap-4 rounded-xl border border-line bg-ink-soft px-6">
         <span className="shrink-0 rounded-full bg-acid px-4 py-1 text-[18px] font-semibold text-on-accent">
           共通點
@@ -745,7 +746,7 @@ export function CommunityToolsDemo() {
           都是開發者替自己的痛點做的工具；第 3 頁的作業，就是輪到你做一個。
         </p>
         <p className="ml-auto text-[20px] leading-tight whitespace-nowrap text-muted">
-          下一頁 CODD：講師把 01、02、03 做進同一個工具 →
+          第 43 頁 CODD：講師把 01、02、03 做進同一個工具 →
         </p>
       </div>
     </div>

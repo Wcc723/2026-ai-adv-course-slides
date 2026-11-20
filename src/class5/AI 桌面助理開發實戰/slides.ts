@@ -20,6 +20,7 @@ import { SubscriptionPollDemo } from './demos-subscription-poll';
 import { MiniPetDemo } from './demos-mini-pet';
 import { GeminiCompareDemo } from './demos-gemini-compare';
 import { CommunityToolsDemo } from './demos-community-tools';
+import { ExtensionAppsDemo } from './demos-extension-apps';
 import {
   ProjectsDemo,
   SmartUiDemo,
@@ -108,9 +109,19 @@ export const slideSubtitle = 'ChatGPT vs Claude Desktop';
  *     點卡片看一句補充與出處；情境是上網查來、逐條對過原文的（出處與查核日在那個檔的檔頭）。
  *   - 原本第 35–46 頁各加 1 → 第 36–47 頁；投票頁數不變（新頁沒有投票）。
  *
+ * 2026-11-20（共 47 頁 → 48 頁）：
+ *   - 第 41 頁「社群上的自製工具」後面補第 42 頁「作業靈感：可以替自己做哪些工具」
+ *     （demos-extension-apps.tsx）：第 3 頁作業的靈感牆，講師指定的八個點子，每個只有名字
+ *     （兩個附講師原文的小字），點卡片只是標示。不列現成產品、不給答案；
+ *     稍早列查證過的現成工具那一版被講師退回。
+ *   - 原本第 42–47 頁各加 1 → 第 43–48 頁；投票頁數不變（新頁沒有投票）。
+ *   - 同一天講師再調整第 42 頁：「左邊是選項、右邊是示意圖，也可以使用 Codex Image 來生成概念圖」。
+ *     4 × 2 卡片牆拿掉，改成左邊八個選項（一次選一個，預設 01）、右邊大張概念圖
+ *     （images/idea-*.webp，八張 Codex image_generation 生成的 3:2 插圖，prompt 記在那個檔的檔頭）。
+ *
  * 頁序：開場（投票、作業、體感、訂閱、訂閱投票、重點）→ 兩家桌面版的介面 → 共有的能力
  *   → ChatGPT 獨特的能力 → Claude 獨特的能力 → 小章節 Google Antigravity
- *   → 開發屬於自己的工具（社群的工具、CODD、實戰）→ 投票結果
+ *   → 開發屬於自己的工具（社群的工具、作業靈感、CODD、實戰）→ 投票結果
  *
  * 投票：功能頁底部 1～5 分（withVote），走 Cloudflare 的 WebSocket（vote-*.ts），
  * 最後一頁是即時排行。第 2 頁的挑戰投票是同一條連線上的單選題（vote-topics.ts 的 POLL）。
@@ -351,7 +362,7 @@ export const steps: Step[] = [
     body: { kind: 'demo', render: AntigravityExamplesDemo },
   },
 
-  /* ── 開發屬於自己的工具：社群的工具、CODD、實戰中的用法 ─── */
+  /* ── 開發屬於自己的工具：社群的工具、作業靈感、CODD、實戰中的用法 ─── */
 
   {
     id: 'own-tools-cover',
@@ -362,6 +373,11 @@ export const steps: Step[] = [
     id: 'community-tools',
     title: '社群上的自製工具',
     body: { kind: 'demo', render: CommunityToolsDemo },
+  },
+  {
+    id: 'extension-apps',
+    title: '作業靈感：可以替自己做哪些工具',
+    body: { kind: 'demo', render: ExtensionAppsDemo },
   },
   {
     id: 'codd',

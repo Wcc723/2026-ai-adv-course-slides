@@ -45,7 +45,7 @@ import { DEFAULT_VOTE_ROOM, VOTE_ROOM } from './vote-config';
  *         所以不顯示百分比）。
  *   題二  主題 sub-budget，score 1～4 ＝ 第幾個額度，counts[0..3] 就是各額度的票數；
  *         點另一張就是改票（同第 2 頁）。百分比 ＝ 這一格 ÷ 這一題的總票數。
- *   兩題都不算進第 47 頁的功能排行（VoteResultsDemo 只列 VOTE_TOPICS）。
+ *   兩題都不算進第 48 頁的功能排行（VoteResultsDemo 只列 VOTE_TOPICS）。
  *   學員端與講師投影端是同一個畫面；按下去馬上顯示「你有訂／你選的」（樂觀更新），
  *   人數等伺服器廣播（約 250ms）。
  *

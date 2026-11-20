@@ -3,8 +3,8 @@ import { Fragment, useEffect, useState, type KeyboardEvent, type MouseEvent, typ
 /* ══════════════════════════════════════════════════════════════
  * 〈AI 桌面助理開發實戰－ChatGPT vs Claude〉— 實戰：用一段提示詞建立 GitHub Project
  *
- *   第 46 頁  PracticeProjectPromptDemo  實戰：用一段提示詞建立 GitHub Project
- *             接在第 45 頁 PracticeDevicesShotsDemo（demos-practice.tsx，跨裝置流程的
+ *   第 47 頁  PracticeProjectPromptDemo  實戰：用一段提示詞建立 GitHub Project
+ *             接在第 46 頁 PracticeDevicesShotsDemo（demos-practice.tsx，跨裝置流程的
  *             實際畫面）後面。沒有投票 → 根容器 h-[720px]。
  *
  *   左  提示詞「分階段複製」：左側五個階段的步驟列，每一步右邊一顆「複製」（點了就複製
@@ -31,7 +31,7 @@ import { Fragment, useEffect, useState, type KeyboardEvent, type MouseEvent, typ
  *   （2026-11-18 用程式比對過，也跟改版前的全文逐字相同）。
  *   畫面顯示與複製出去的是同一份資料；指令、檔名用等寬字標出來（CODE_FRAGMENTS）
  *   只是排版，「一定要有」標籤也只在畫面上，都不會進到複製的內容。
- * - 範本是講師自己的 Project「casper.tw 開發」（私人看板，第 45 頁有實際畫面），
+ * - 範本是講師自己的 Project「casper.tw 開發」（私人看板，第 46 頁有實際畫面），
  *   描述「跨裝置協同的唯一工作來源」。借用的規則：
  *     Status 單選：探索、待開發（範圍清楚，可以接）、開發中、驗收、已上線、完成、凍結（終止）
  *     Agent 文字：「模型 / 裝置名稱 / session 前 8 碼」
@@ -879,7 +879,7 @@ function StageStepper({ stage, onPick }: { stage: Stage; onPick: (stage: Stage) 
 }
 
 /* ══════════════════════════════════════════════════════════════
- * 第 46 頁 · PracticeProjectPromptDemo
+ * 第 47 頁 · PracticeProjectPromptDemo
  * ══════════════════════════════════════════════════════════════ */
 
 export function PracticeProjectPromptDemo() {

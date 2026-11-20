@@ -26,9 +26,10 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  *
  *   第 31 頁  ArtifactDemo      互動式 Artifact（withVote → 根容器 640）
  *   第 32 頁  StudioDemo        Slides、Design、Dashboards、Motion（withVote → 640）
- *   第 42 頁  CoddDemo          CODD：我自己開發的工具（withVote → 640）
+ *   第 43 頁  CoddDemo          CODD：我自己開發的工具（withVote → 640）
  *   （Environments 在 demos-environments.tsx／demos-environments-try.tsx（第 33–34 頁）；
- *    CODD 前一頁是第 41 頁的社群工具 demos-community-tools.tsx。）
+ *    CODD 前一頁是第 42 頁的作業靈感 demos-extension-apps.tsx，再前面是第 41 頁的社群工具
+ *    demos-community-tools.tsx。）
  *
  * 2026-11-18 講師 CODD 筆記「簡報調整」（codd://note/note-plus）：「實戰：ChatGPT 系列與
  * 混合使用」「這頁幫我移除，目前跟上下文比較沒有關係」→ MixDemo 連同只有它用到的
@@ -36,6 +37,7 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  * 與按鈕樣式（BTN_*）一起刪掉。頁碼同時改成 47 頁版（Artifact 29 → 31、CODD 37 → 42）。
  * 2026-11-19 刪掉 Environments 的第 34 頁（47 → 46 頁），CODD 一度變成第 41 頁；
  * 同一天又在第 34 頁後補了情境頁（46 → 47 頁），CODD 回到第 42 頁。
+ * 2026-11-20 在第 41 頁後補了作業靈感頁（47 → 48 頁），CODD 變成第 43 頁。
  *
  * ──────────────────────────────────────────────────────────────
  * 內容來源：Notion「課綱 › ChatGPT vs Claude」（2026-11-10 讀取）
@@ -48,11 +50,11 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  * 第 32 頁  callout「Slides、Design、Dashboards、Motion」：「這些功能說實在我也沒用過，
  *           所以我希望你幫我生成相關的範例…生成完之後，你再把這個連結放進來」。
  *           前半句放進右下的卡片；後半句就是最上方的 STUDIO_EXAMPLES。
- * 第 42 頁  callout「CODD 我自己開發的工具」的特色清單，五項照原文分成五個選項。
+ * 第 43 頁  callout「CODD 我自己開發的工具」的特色清單，五項照原文分成五個選項。
  *           視覺複製自第四堂課 src/class4/AI 協作進階/demos-codd.tsx（不 import）。
  *           第 4 項依筆記改成「內部文件管理」，右邊換成講師 CODD 的實際畫面
  *           （images/codd-notes.webp，筆記裡附的截圖）。
- *           Claude 系列與跨裝置流程在 demos-practice.tsx（第 43–45 頁）。
+ *           Claude 系列與跨裝置流程在 demos-practice.tsx（第 44–46 頁）。
  *
  * ──────────────────────────────────────────────────────────────
  * 查證（查核日 2026-11-10）
@@ -88,7 +90,7 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  *     「互動 → Claude 讀得到 → 一起做決定」是依講師那段話畫的；官方文件沒有寫
  *     Claude 怎麼讀到這些互動（見回報的待確認）。
  *   - 第 32 頁：四張縮圖是 JSX 畫的示意；四句提示詞是補的（Dashboards 那句改寫自官方範例）。
- *   - 第 42 頁：三個 session、資料夾、文件、三個帳號、所有數字都是虛構的。
+ *   - 第 43 頁：三個 session、資料夾、文件、三個帳號、所有數字都是虛構的。
  *     「切換帳號後，USAGE 換成那個帳號的剩餘用量」是示意；Notion 只寫了兩項功能本身。
  *     「內部文件管理」的三個放大區域與說明（收件匣、AI 可讀權限、版本紀錄）是照截圖寫的。
  *     介面示意裡 class5 那個 session 的「第 31 頁」指本簡報的 Artifact 頁（2026-11-18 起的頁碼）。
@@ -98,7 +100,7 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  * ──────────────────────────────────────────────────────────────
  *   第 31 頁  acid 目前情境、選到的選項、「② Claude 讀到」；blue 兩張範例連結卡
  *   第 32 頁  acid 選到的卡片、動起來的縮圖元素、提示詞卡；blue 範例連結
- *   第 42 頁  acid 選單、介面示意上的外框、實際畫面縮圖上選到的區域；
+ *   第 43 頁  acid 選單、介面示意上的外框、實際畫面縮圖上選到的區域；
  *             amber WAITING 與快用完的額度（同第四堂課）
  *   淡底（/14）一律配 6px 不透明左粗條或實色外框，不單獨承擔語意。
  *
@@ -111,7 +113,7 @@ const STUDIO_EXAMPLES: Record<StudioId, string> = {
  *   Artifact 欄：步驟標籤＋問題 59 ＋ 16 ＋ 內容（最高是決策 3 × 104 ＋ 24 ＝ 336）≈ 411 ≤ 468。
  * 第 32 頁 640：卡片列 452（縮圖 160 ＋ 名稱 38 ＋ 說明 ≤ 90 ＋ 補充 25 ＋ 連結 68 ＋ 間距 ≈ 431）
  *   ＋ 16 ＋ 下排 172（提示詞卡約 111；講師卡約 133）。
- * 第 42 頁 640：左欄五個選項各 120。右卡 ＝ 外框 2 ＋ py 40 ＋ 標題列 48 ＋ 12 ＋ 介面示意 466
+ * 第 43 頁 640：左欄五個選項各 120。右卡 ＝ 外框 2 ＋ py 40 ＋ 標題列 48 ＋ 12 ＋ 介面示意 466
  *   ＋ 12 ＋ 說明 56 ＝ 636（留 4）。
  *   側欄（內高 462）＝ py 16 ＋ 品牌列 32 ＋ 6 ＋ session 區 216 ＋ HOST 102 ＋ 4 ＋ USAGE 78 ＝ 454。
  *   主區終端機內容高 310，行高 25.2：最多是 WAITING 的四行＋確認框＋插入文件兩行 ≈ 299。
@@ -1311,7 +1313,7 @@ export function StudioDemo() {
 }
 
 /* ══════════════════════════════════════════════════════════════
- * 第 42 頁 CoddDemo — CODD：我自己開發的工具
+ * 第 43 頁 CoddDemo — CODD：我自己開發的工具
  *
  *   左  Notion 的五項特色。
  *   右  CODD 的介面示意（視覺沿用第四堂課），選到哪一項，那一區就用 acid 外框標出來。
